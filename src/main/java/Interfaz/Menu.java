@@ -4,17 +4,34 @@
  */
 package Interfaz;
 
+import ERRORES_202103718.usoER;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 /**
  *
  * @author harry
  */
 public class Menu extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Menu
-     */
+    /*public static String hola() {
+        System.out.println("s");
+        String text = "hola";
+        return text;
+    }*/
+    
     public Menu() {
         initComponents();
+        setTitle("EXREGAN Usac");
+        this.setLocationRelativeTo(this);   
     }
 
     /**
@@ -26,57 +43,295 @@ public class Menu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        FileChooser = new javax.swing.JFileChooser();
+        txt_archivo = new java.awt.TextArea();
+        nombreArchivo = new javax.swing.JLabel();
+        btn_generarAutomata = new java.awt.Button();
+        btn_analizar = new java.awt.Button();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jt_consola = new javax.swing.JTextArea();
+        jLabel2 = new javax.swing.JLabel();
+        BarraMenu = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        FileChooser.getAccessibleContext().setAccessibleName("");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Menu");
+        setBackground(new java.awt.Color(102, 0, 51));
+        setName("frame"); // NOI18N
+
+        nombreArchivo.setText("Archivo...");
+
+        btn_generarAutomata.setLabel("Generar automata");
+        btn_generarAutomata.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_generarAutomataActionPerformed(evt);
+            }
+        });
+
+        btn_analizar.setLabel("Analizar");
+        btn_analizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_analizarActionPerformed(evt);
+            }
+        });
+
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jScrollPane1.setHorizontalScrollBar(null);
+
+        jt_consola.setColumns(20);
+        jt_consola.setRows(5);
+        jt_consola.setText("LA EXPRESION: ESTA CORRECTA");
+        jt_consola.setEnabled(false);
+        jScrollPane1.setViewportView(jt_consola);
+
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("Consola");
+        jLabel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        jMenu1.setText("Archivo");
+
+        jMenuItem1.setText("Nuevo archivo");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+        jMenuItem1.getAccessibleContext().setAccessibleName("nuevoArchivo");
+
+        jMenuItem2.setText("Abrir archivo");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
+
+        BarraMenu.add(jMenu1);
+
+        jMenu2.setBackground(new java.awt.Color(255, 51, 51));
+        jMenu2.setText("Editar/Guardar");
+
+        jMenuItem3.setText("Guardar Como");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem3);
+
+        jMenuItem4.setText("Guardar");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem4);
+
+        BarraMenu.add(jMenu2);
+
+        jMenu3.setText("Salir");
+
+        jMenuItem5.setText("Salir");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem5);
+
+        BarraMenu.add(jMenu3);
+
+        setJMenuBar(BarraMenu);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(20, Short.MAX_VALUE)
+                        .addComponent(txt_archivo, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btn_generarAutomata, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btn_analizar, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(158, 158, 158)))
+                .addGap(23, 23, 23))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(nombreArchivo)
+                .addGap(57, 57, 57))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 670, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(nombreArchivo)
+                .addGap(2, 2, 2)
+                .addComponent(txt_archivo, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btn_generarAutomata, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_analizar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(22, 22, 22)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
+
+        btn_generarAutomata.getAccessibleContext().setAccessibleName("generarAutomata");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        //Nuevo Archivo
+        txt_archivo.setText("");
+        nombreArchivo.setText("Archivo...");
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-        /* Create and display the form */
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        //Boton Salir
+        int salir = JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro que deseas salir?");
+        
+        if(JOptionPane.OK_OPTION == salir){
+            System.exit(0);
+        }
+        else{
+            if(JOptionPane.CANCEL_OPTION == salir){
+                return;
+            }
+        }
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void btn_generarAutomataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_generarAutomataActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_generarAutomataActionPerformed
+
+    private void btn_analizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_analizarActionPerformed
+       String textoNuevo = RETURNtext();
+       System.out.println(textoNuevo);
+       
+       try{
+            Analizador.parser parse;
+            parse = new Analizador.parser(new Analizador.Lexer(new StringReader(textoNuevo)));
+            
+            parse.parse();
+          
+        }
+        catch(Exception ex){
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+    }//GEN-LAST:event_btn_analizarActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        //ABRIR ARCHIVO
+        JFileChooser fc = new JFileChooser();
+        
+        //FILTRO DE ARCHIVOS
+        FileNameExtensionFilter fil = new FileNameExtensionFilter("Archivo olc", "olc");
+        fc.setFileFilter(fil);
+        
+        int seleccion = fc.showOpenDialog(this);
+        
+        if(seleccion == FileChooser.APPROVE_OPTION){
+            File fichero = fc.getSelectedFile();
+            
+            this.nombreArchivo.setText(fichero.getAbsolutePath());
+
+            try(FileReader fr = new FileReader(fichero)){
+                String cadena = "";
+                int val = fr.read();
+                while (val != -1){
+                    cadena = cadena + (char) val;
+                    val = fr.read();
+                }
+                
+                this.txt_archivo.setText(cadena);
+                
+            } catch(IOException el){
+                el.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        //GUARDAR COMO
+        JFileChooser fc = new JFileChooser();
+        
+        int seleccion = fc.showSaveDialog(this);
+        
+        if(seleccion == JFileChooser.APPROVE_OPTION){
+            File fichero = fc.getSelectedFile();
+            
+            try(FileWriter fw = new FileWriter(fichero)){
+                fw.write(this.txt_archivo.getText());
+                JOptionPane.showMessageDialog(null, "Archivo guardado correctamente!");
+            } catch(IOException el){
+                el.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // GUARDAR
+       
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    public static void main(String args[]) {
+       
+        System.out.println("HOLA COMO ESTAS AMIGO MIO");
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Menu().setVisible(true);
             }
         });
     }
+    
+    public String RETURNtext(){
+        String texto = this.txt_archivo.getText();
+        return texto;
+    }
+    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuBar BarraMenu;
+    private javax.swing.JFileChooser FileChooser;
+    private java.awt.Button btn_analizar;
+    private java.awt.Button btn_generarAutomata;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jt_consola;
+    private javax.swing.JLabel nombreArchivo;
+    private java.awt.TextArea txt_archivo;
     // End of variables declaration//GEN-END:variables
 }

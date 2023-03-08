@@ -1,20 +1,20 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package edu.usac.olc1.proyecto1;
 
-/**
- *
- * @author harry
- */
+import Interfaz.Menu;
+import java.io.StringReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Base {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        // TODO code application logic here
+        String ca = "\"Maradona\"";
+        int letra = ca.indexOf("\"",1); 
+        String sSubCadena = ca.substring(1,letra);
+        
+        System.out.println(letra);
+        System.out.println(sSubCadena);
+        
     }
-    
 }
+
