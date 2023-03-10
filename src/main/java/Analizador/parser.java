@@ -145,9 +145,11 @@ public class parser extends java_cup.runtime.lr_parser {
 
 
     public DefConjuntos defC = new DefConjuntos();
+    public databaseAFD afd = new databaseAFD();
     
     // COMPONENTES PARA TABLA DE SIGUIENTES
-    public tablaSig sigui = new tablaSig();
+    public tablaSig objSig = new tablaSig();
+    public static String cadenaERnombre = "";
 
     // COMPONENTES PARA EL ARBOL SINTACTICO
     public static  int cont = 1;
@@ -287,11 +289,18 @@ class CUP$parser$actions {
             }
             ulti = nuevofinal.getUltimo();
             Nodo nuevaraiz = new Nodo(valor, nuevofinal, ".", parser.cont, 0, "N", prime,ulti);
-
-
             parser.Raiz = nuevaraiz;
             graficarArbol(nuevaraiz, nombre);
             IDS = 1;
+
+            //TABLA DE SIGUIENTES
+            parser.objSig.addElementH(nuevaraiz.getHizq().getUltimo(), nuevaraiz.getHder().getPrimero());
+            cadenaERnombre += "#,";
+            parser.objSig.Graphviz(cadenaERnombre, nombre);
+
+            //REINICIO DE VARIABLES
+            cadenaERnombre = "";
+            parser.objSig.limpiarMap();
         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DEFER",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -313,6 +322,8 @@ class CUP$parser$actions {
             String prime;
             String ulti;
             Nodo nuevofinal = new Nodo(null, null, "#", parser.cont, parser.IDS, "N", prim, ult);
+            parser.objSig.addElementH(nuevofinal.getPrimero(), "-");
+
             parser.cont++;
             if (valor.getAnulable().equals("A")){
                 prime = valor.getPrimero() + ult;
@@ -321,10 +332,18 @@ class CUP$parser$actions {
             }
             ulti = nuevofinal.getUltimo();
             Nodo nuevaraiz = new Nodo(valor, nuevofinal, ".", parser.cont, 0, "N", prime,ulti);
-
             parser.Raiz = nuevaraiz;
             graficarArbol(nuevaraiz, nombre);
             IDS = 1;
+
+            //TABLA DE SIGUIENTES
+            parser.objSig.addElementH(nuevaraiz.getHizq().getUltimo(), nuevaraiz.getHder().getPrimero());
+            cadenaERnombre += "#,";
+            parser.objSig.Graphviz(cadenaERnombre, nombre);
+
+            //REINICIO DE VARIABLES
+            cadenaERnombre = "";
+            parser.objSig.limpiarMap();
         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DEFER",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -385,10 +404,7 @@ class CUP$parser$actions {
             parser.cont++;
 
            // TABLA DE SIGUIENTES
-            System.out.println("-----Siguientes "+valor+">  \n"+ "Asignaran a: ");
-            System.out.println(dualER.getHizq().getUltimo());
-            System.out.println("los valores:");
-            System.out.println(dualER.getHder().getUltimo());
+            parser.objSig.addElementH(dualER.getHizq().getUltimo(), dualER.getHder().getPrimero());
 
             RESULT = dualER;
         }
@@ -432,6 +448,10 @@ class CUP$parser$actions {
                 String ult = b.getUltimo();
                 Nodo indER = new Nodo(b,null,valor,parser.cont, 0, "N", prim, ult);
                 parser.cont++;
+
+                //TABLA DE SIGUIENTES
+                parser.objSig.addElementH(indER.getHizq().getPrimero(), indER.getHizq().getUltimo());
+
                 RESULT = indER;
             }
             if (valor.equals("*")){
@@ -445,6 +465,7 @@ class CUP$parser$actions {
                 System.out.println(indER.getHizq().getPrimero());
                 System.out.println("los valores:");
                 System.out.println(indER.getHizq().getUltimo());
+                parser.objSig.addElementH(indER.getHizq().getPrimero(), indER.getHizq().getUltimo());
 
                 RESULT = indER;
             }
@@ -556,6 +577,7 @@ class CUP$parser$actions {
         String cadena = s.toString(); //"hola"
         int indice = cadena.indexOf("\"",1); 
         String Fcadena = cadena.substring(1,indice);
+        cadenaERnombre += Fcadena + ",";
         RESULT = Fcadena; 
      
               CUP$parser$result = parser.getSymbolFactory().newSymbol("TE",11, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -577,6 +599,7 @@ class CUP$parser$actions {
 		Object c = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 
         // METODO DEL ARBOL
+        cadenaERnombre += b.toString() + ",";
         RESULT = b.toString(); 
      
               CUP$parser$result = parser.getSymbolFactory().newSymbol("TE",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
