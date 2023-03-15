@@ -7,6 +7,8 @@ public class transicion {
     public List<String> nodos;
     public String estadoF;
     public boolean acept;
+    public boolean evaluacion = false;
+    private List<String> sigEvaluar;
 
     public transicion(String estadoI, String simbolo, List<String> nodos, String estadoF, boolean acept) {
         this.estadoI = estadoI;
@@ -14,8 +16,18 @@ public class transicion {
         this.nodos = nodos;
         this.estadoF = estadoF;
         this.acept = acept;
+        this.evaluacion = evaluacion;
+        this.sigEvaluar = sigEvaluar;
     }
 
+    public List<String> getSigEvaluar() {
+        return sigEvaluar;
+    }
+
+    public void setSigEvaluar(List<String> sigEvaluar) {
+        this.sigEvaluar = sigEvaluar;
+    }    
+    
     public String getEstadoI() {
         return estadoI;
     }
@@ -54,6 +66,14 @@ public class transicion {
 
     public void setAcept(boolean acept) {
         this.acept = acept;
+    }
+
+    public boolean isEvaluacion() {
+        return evaluacion;
+    }
+
+    public void setEvaluacion(boolean evaluacion) {
+        this.evaluacion = evaluacion;
     }
     
    
