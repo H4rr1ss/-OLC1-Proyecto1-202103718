@@ -1,14 +1,16 @@
 package Analizador;
 import SIGUIENTES_202103718.*;
+import TRANSICIONES_202103718.*;
+import AFD_202103718.*;
 import edu.usac.olc1.proyecto1.*;
 import java_cup.runtime.*;
+import java.util.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
 parser code {:
     public DefConjuntos defC = new DefConjuntos();
-    public databaseAFD afd = new databaseAFD();
     
     // COMPONENTES PARA TABLA DE SIGUIENTES
     public tablaSig objSig = new tablaSig();
@@ -81,37 +83,50 @@ terminal String LETMAY, LETMIN, VARIABLE, TILDE, DIG, COMA;
 
 non terminal INICIO, BODY, AUXCONV, DEFCONJS, DEFER, TESTER, NOTACION, NOTACIONCONV, LETRA;
 non terminal String SD, SU, TE;
-non terminal Nodo DEFERS, T, ER;
+non terminal Nodo T, ER;
 
 start with INICIO;
 
-INICIO ::= BODY{: System.out.println(" \nya salio :) \n---------->\n"); parser.defC.print(); :};
+INICIO ::= BODY
+            {: 
+            dbAFD.returnAFD();
+            System.out.println(" \nya salio :) \n---------->\n"); 
+            :};
 
 //CUERPO DE LA GRAMATICA
-BODY ::= LLAVE_A DEFER PORCENT PORCENT PORCENT PORCENT LLAVE_C;
+BODY ::= LLAVE_A DEFCONJS DEFER LLAVE_C
+            {:
+                parser.defC.DefinicionDeConjuntos();
+            :};
 //LLAVE_A DEFCONJS DEFER PORCENT PORCENT PORCENT PORCENT TESTER LLAVE_C;
 
+
+
 //BLOQUE [DEFINICION DE CONJUNTOS]
-/*DEFCONJS ::= DEFCONJS NCONJ DP VARIABLE:a GUION MAYOR NOTACION:b PC
-           {: String c = b.toString(); parser.defC.add(a,c); System.out.println(a+" -> "+c); :}
+DEFCONJS ::= DEFCONJS NCONJ DP VARIABLE:a GUION MAYOR NOTACION:b PC
+           {: String c = b.toString(); parser.defC.add(a,c); :}
            | NCONJ DP VARIABLE:a GUION MAYOR NOTACION:b PC
-           {: String c = b.toString(); parser.defC.add(a,c); System.out.println(a+" -> "+c); :}
+           {: String c = b.toString(); parser.defC.add(a,c); :}
             ;
 
-NOTACION ::= LETMIN:a TILDE:b LETMIN:c
+NOTACION ::= NOTACIONCONV:n
+            {: RESULT = n; System.out.println(n.toString()); :}
+            |LETMIN:a TILDE:b LETMIN:c
             {: RESULT = a.toString()+b.toString()+c.toString(); :}
             | LETMAY:a TILDE:b LETMAY:c
             {: RESULT = a.toString()+b.toString()+c.toString(); :}
             | DIG:a TILDE:b DIG:c
             {: RESULT = a.toString()+b.toString()+c.toString(); :}
-            | NOTACIONCONV:n
-            {: RESULT = n; :}
             ;
 
 NOTACIONCONV ::= AUXCONV:a LETRA:c
-              {: RESULT = a.toString()+c.toString(); :}
+              {: String res = a.toString()+c.toString(); 
+                 RESULT = res;
+              :}
                | LETRA:l
-               {: RESULT = l.toString(); :}
+               {: 
+                RESULT = l.toString(); 
+              :}
               ;
 
 AUXCONV ::= AUXCONV:a LETRA:b COMA:c
@@ -121,11 +136,14 @@ AUXCONV ::= AUXCONV:a LETRA:b COMA:c
        ;
 
 LETRA ::= LETMAY: ly
-        {: RESULT = ly; :}
+        {: RESULT = ly.toString(); :}
         | LETMIN: ln
-        {: RESULT = ln; :}
-        | DIG
-        ;*/
+        {: RESULT = ln.toString(); :}
+        | DIG: d
+        {: RESULT = d.toString(); :}
+        ;
+
+
 
 //BLOQUE [DEFICION DE EXPRESIONES REGUALES EN POLACO]
 DEFER ::= DEFER VARIABLE:nombre GUION MAYOR ER:valor PC
@@ -135,6 +153,8 @@ DEFER ::= DEFER VARIABLE:nombre GUION MAYOR ER:valor PC
             String prime;
             String ulti;
             Nodo nuevofinal = new Nodo(null, null, "#", parser.cont, parser.IDS, "N", prim, ult);
+            parser.objSig.addElementH(nuevofinal.getPrimero(), "-");
+
             parser.cont++;
             if (valor.getAnulable().equals("A")){
                 prime = valor.getPrimero() + ult;
@@ -147,14 +167,35 @@ DEFER ::= DEFER VARIABLE:nombre GUION MAYOR ER:valor PC
             graficarArbol(nuevaraiz, nombre);
             IDS = 1;
 
-            //TABLA DE SIGUIENTES
+            //TABLA DE SIGUIENTES------------------------------>
             parser.objSig.addElementH(nuevaraiz.getHizq().getUltimo(), nuevaraiz.getHder().getPrimero());
             cadenaERnombre += "#,";
+            System.out.println("ARRIBA: "+cadenaERnombre);
             parser.objSig.Graphviz(cadenaERnombre, nombre);
+            //------------------------------------------------->
 
-            //REINICIO DE VARIABLES
+            //TABLA DE TRANSICIONES---------------------------->
+            dbTablaTransicion TT = new dbTablaTransicion();
+            parser.objSig.asignacionTablaTransiciones(TT, cadenaERnombre);
+            TT.TablaTransiciones(nuevaraiz.getPrimero(), nombre);
+            //------------------------------------------------->
+
+            //CREACION OBJ AFD--------------------------------->
+            List<String> statusA =  TT.estadosDeAceptacion();
+            Map<String, List<String[]>> transitions = TT.modificacionTransiciones();
+            HashMap<String, List<String>> conjunts = parser.defC.DefinicionDeConjuntos();
+            AFD objAFD = new AFD(nombre, "S0", statusA, transitions);
+            objAFD.setConjuntos(conjunts);
+            dbAFD.InsertAFD(objAFD);
+            //-------------------------------------------------->
+
+            //-----------------REINICIO DE VARIABLES-----------------
+            //SIGUIENTES
             cadenaERnombre = "";
             parser.objSig.limpiarMap();
+            //TRANSICIONES
+            TT.limipiarMap_t();
+            
         :}
 
         | VARIABLE:nombre GUION MAYOR ER:valor PC
@@ -178,14 +219,34 @@ DEFER ::= DEFER VARIABLE:nombre GUION MAYOR ER:valor PC
             graficarArbol(nuevaraiz, nombre);
             IDS = 1;
 
-            //TABLA DE SIGUIENTES
+            //TABLA DE SIGUIENTES------------------------------>
             parser.objSig.addElementH(nuevaraiz.getHizq().getUltimo(), nuevaraiz.getHder().getPrimero());
             cadenaERnombre += "#,";
+            System.out.println("ABAJO: "+cadenaERnombre);
             parser.objSig.Graphviz(cadenaERnombre, nombre);
+            //------------------------------------------------->
 
-            //REINICIO DE VARIABLES
+            //TABLA DE TRANSICIONES---------------------------->
+            dbTablaTransicion TT = new dbTablaTransicion();
+            parser.objSig.asignacionTablaTransiciones(TT, cadenaERnombre);
+            TT.TablaTransiciones(nuevaraiz.getPrimero(), nombre);
+            //------------------------------------------------->
+
+            //CREACION OBJ AFD--------------------------------->
+            List<String> statusA =  TT.estadosDeAceptacion();
+            Map<String, List<String[]>> transitions = TT.modificacionTransiciones();
+            HashMap<String, List<String>> conjunts = parser.defC.DefinicionDeConjuntos();
+            AFD objAFD = new AFD(nombre, "S0", statusA, transitions);
+            objAFD.setConjuntos(conjunts);
+            dbAFD.InsertAFD(objAFD);
+            //-------------------------------------------------->
+            
+            //-----------------REINICIO DE VARIABLES-----------------
+            //SIGUIENTES
             cadenaERnombre = "";
             parser.objSig.limpiarMap();
+            //TRANSICIONES
+            TT.limipiarMap_t();
         :}
         ;
 
@@ -237,11 +298,11 @@ ER ::= SD:c ER:a ER:b
             RESULT = dualER;
         }
 
-        System.out.println("ER--|"+a+c.toString()+b);
+        //System.out.println("ER--|"+a+c.toString()+b);
         
     :}
     | T:t
-    {: RESULT = t; System.out.println("ER T--|"+t.getValor()); :}
+    {: RESULT = t; :}
     ;
 
 T ::= SU:a ER:b
@@ -268,10 +329,10 @@ T ::= SU:a ER:b
                 parser.cont++;
 
                 // TABLA DE SIGUIENTES
-                System.out.println("-----Siguientes "+valor+">  \n"+ "Asignaran a: ");
+                /*System.out.println("-----Siguientes "+valor+">  \n"+ "Asignaran a: ");
                 System.out.println(indER.getHizq().getPrimero());
                 System.out.println("los valores:");
-                System.out.println(indER.getHizq().getUltimo());
+                System.out.println(indER.getHizq().getUltimo());*/
                 parser.objSig.addElementH(indER.getHizq().getPrimero(), indER.getHizq().getUltimo());
 
                 RESULT = indER;
@@ -283,13 +344,13 @@ T ::= SU:a ER:b
                 parser.cont++;
                 RESULT = indER;
             }
-            System.out.println("T ER|"+a+b.getValor());
+            //System.out.println("T ER|"+a+b.getValor());
             
         :}
     | TE:s
     {:
         // METODO DEL ARBOL
-        System.out.println("T-------|"+s);
+        //System.out.println("T-------|"+s);
         String valor = s.toString();
         String prim = IDS+",";
         String ult = IDS+",";
@@ -330,6 +391,9 @@ TE ::= STR:s
         RESULT = b.toString(); 
      :}
      ;
+
+
+
 
 //bloque [TEST DE LAS EXPRESIONES REGULARES EN POLACO]
 /*TESTER ::= TESTER VARIABLE DP STR PC

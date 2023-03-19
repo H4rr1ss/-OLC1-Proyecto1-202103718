@@ -4,12 +4,15 @@
  */
 package Interfaz;
 
+import AFD_202103718.AFD;
 import ERRORES_202103718.usoER;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import AFD_202103718.dbAFD;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -46,11 +49,15 @@ public class Menu extends javax.swing.JFrame {
         FileChooser = new javax.swing.JFileChooser();
         txt_archivo = new java.awt.TextArea();
         nombreArchivo = new javax.swing.JLabel();
-        btn_generarAutomata = new java.awt.Button();
-        btn_analizar = new java.awt.Button();
         jScrollPane1 = new javax.swing.JScrollPane();
         jt_consola = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
+        botones = new javax.swing.JPanel();
+        btn_analizar = new java.awt.Button();
+        btn_generarAutomata = new java.awt.Button();
+        eleccion = new javax.swing.JPanel();
+        btn_cargaAFD = new javax.swing.JButton();
+        jListaAFD = new javax.swing.JComboBox<>();
         BarraMenu = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -69,20 +76,6 @@ public class Menu extends javax.swing.JFrame {
 
         nombreArchivo.setText("Archivo...");
 
-        btn_generarAutomata.setLabel("Generar automata");
-        btn_generarAutomata.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_generarAutomataActionPerformed(evt);
-            }
-        });
-
-        btn_analizar.setLabel("Analizar");
-        btn_analizar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_analizarActionPerformed(evt);
-            }
-        });
-
         jScrollPane1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jScrollPane1.setHorizontalScrollBar(null);
 
@@ -95,6 +88,103 @@ public class Menu extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Consola");
         jLabel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        botones.setBackground(new java.awt.Color(233, 228, 205));
+        botones.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        btn_analizar.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        btn_analizar.setLabel("Analizar");
+        btn_analizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_analizarActionPerformed(evt);
+            }
+        });
+
+        btn_generarAutomata.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        btn_generarAutomata.setLabel("Generar automata");
+        btn_generarAutomata.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_generarAutomataActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout botonesLayout = new javax.swing.GroupLayout(botones);
+        botones.setLayout(botonesLayout);
+        botonesLayout.setHorizontalGroup(
+            botonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(botonesLayout.createSequentialGroup()
+                .addGap(48, 48, 48)
+                .addGroup(botonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btn_analizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_generarAutomata, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        botonesLayout.setVerticalGroup(
+            botonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(botonesLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(btn_generarAutomata, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btn_analizar, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+
+        btn_generarAutomata.getAccessibleContext().setAccessibleName("generarAutomata");
+
+        eleccion.setBackground(new java.awt.Color(233, 228, 205));
+        eleccion.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        btn_cargaAFD.setBackground(new java.awt.Color(240, 240, 240));
+        btn_cargaAFD.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btn_cargaAFD.setForeground(new java.awt.Color(0, 0, 0));
+        btn_cargaAFD.setText("Cargar AFD'S");
+        btn_cargaAFD.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        btn_cargaAFD.setBorderPainted(false);
+        btn_cargaAFD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cargaAFDActionPerformed(evt);
+            }
+        });
+
+        jListaAFD.setBackground(new java.awt.Color(108, 22, 64));
+        jListaAFD.setFont(new java.awt.Font("Comic Sans MS", 1, 12)); // NOI18N
+        jListaAFD.setForeground(new java.awt.Color(246, 245, 246));
+        jListaAFD.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione AFD" }));
+        jListaAFD.setToolTipText("");
+        jListaAFD.setRequestFocusEnabled(false);
+        jListaAFD.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jListaAFDItemStateChanged(evt);
+            }
+        });
+        jListaAFD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jListaAFDActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout eleccionLayout = new javax.swing.GroupLayout(eleccion);
+        eleccion.setLayout(eleccionLayout);
+        eleccionLayout.setHorizontalGroup(
+            eleccionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(eleccionLayout.createSequentialGroup()
+                .addContainerGap(40, Short.MAX_VALUE)
+                .addComponent(btn_cargaAFD, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(39, 39, 39))
+            .addGroup(eleccionLayout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jListaAFD, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        eleccionLayout.setVerticalGroup(
+            eleccionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(eleccionLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btn_cargaAFD, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jListaAFD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         jMenu1.setText("Archivo");
 
@@ -157,47 +247,41 @@ public class Menu extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(20, Short.MAX_VALUE)
-                        .addComponent(txt_archivo, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btn_generarAutomata, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btn_analizar, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(158, 158, 158)))
-                .addGap(23, 23, 23))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(nombreArchivo)
-                .addGap(57, 57, 57))
+                .addGap(381, 381, 381))
             .addGroup(layout.createSequentialGroup()
-                .addGap(36, 36, 36)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 670, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 670, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_archivo, javax.swing.GroupLayout.PREFERRED_SIZE, 666, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(eleccion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(botones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 13, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
+                .addGap(13, 13, 13)
                 .addComponent(nombreArchivo)
-                .addGap(2, 2, 2)
-                .addComponent(txt_archivo, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btn_generarAutomata, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_analizar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(22, 22, 22)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(botones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(eleccion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(35, 35, 35))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(txt_archivo, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(19, 19, 19)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(21, Short.MAX_VALUE))))
         );
-
-        btn_generarAutomata.getAccessibleContext().setAccessibleName("generarAutomata");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -222,8 +306,12 @@ public class Menu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
+    
     private void btn_generarAutomataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_generarAutomataActionPerformed
         // TODO add your handling code here:
+        //ESTO NO SERA DEFINITIVO LO QUE SE MUESTRA EN LA CONSOLA
+        //String data = dbAFD.returnDatosInterfaz();
+        //jt_consola.setText(data);
     }//GEN-LAST:event_btn_generarAutomataActionPerformed
 
     private void btn_analizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_analizarActionPerformed
@@ -296,16 +384,42 @@ public class Menu extends javax.swing.JFrame {
         // GUARDAR
        
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+    private void btn_cargaAFDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cargaAFDActionPerformed
+
+        List<AFD> lista = dbAFD.returnDatosInterfaz();
+        
+        for(AFD data: lista){
+            jListaAFD.addItem(data.getNombre());
+        }
+    }//GEN-LAST:event_btn_cargaAFDActionPerformed
+
+    private void jListaAFDItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jListaAFDItemStateChanged
+        // TODO add your handling code here:        
+    }//GEN-LAST:event_jListaAFDItemStateChanged
+
+    private void jListaAFDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jListaAFDActionPerformed
+        // TODO add your handling code here:
+        if(jListaAFD.getSelectedIndex()>-1){
+            String salida = jListaAFD.getSelectedItem().toString();
+            jt_consola.setText(salida);
+
+            grafos ventanasec = new grafos();
+            this.setVisible(false);
+            ventanasec.nombreDeBusqueda(salida);
+            ventanasec.setVisible(true);
+        }
+        
+    }//GEN-LAST:event_jListaAFDActionPerformed
 
     public static void main(String args[]) {
-       
-        System.out.println("HOLA COMO ESTAS AMIGO MIO");
-        
+               
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Menu().setVisible(true);
             }
         });
+        
+        
     }
     
     public String RETURNtext(){
@@ -318,9 +432,13 @@ public class Menu extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar BarraMenu;
     private javax.swing.JFileChooser FileChooser;
+    private javax.swing.JPanel botones;
     private java.awt.Button btn_analizar;
+    private javax.swing.JButton btn_cargaAFD;
     private java.awt.Button btn_generarAutomata;
+    private javax.swing.JPanel eleccion;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JComboBox<String> jListaAFD;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;

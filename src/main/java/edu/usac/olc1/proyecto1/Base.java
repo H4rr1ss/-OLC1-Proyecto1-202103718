@@ -1,59 +1,270 @@
 package edu.usac.olc1.proyecto1;
-
-import Interfaz.Menu;
-
+import AFD_202103718.*;
+import Analizador.DefConjuntos;
+import AFD_202103718.dbAFD;
 import java.util.*;
+import Interfaz.Menu;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import TRANSICIONES_202103718.*;
 
 public class Base {
 
-    public static void insert(Map<String, List<String>> map, String key, List<String> value) {
+    private static List<String> iterator(Map<String, List<String>> conjuntos, String alfabeto){
+        int ite = 0;
+        for(Map.Entry<String, List<String>> c: conjuntos.entrySet()){
+            if(alfabeto.equals(c.getKey())){
+                return c.getValue();
+            }
+             ite++;
+        }
+        return null;
+    }
+
+    
+    public static void SCanner(String cadena, AFD afd){
+        
+        String estado = afd.getEstadoI();
+        for(char caracter: cadena.toCharArray()){
+
+            boolean encontrado = false;
+                
+            for(String[] mapa : afd.getTransiciones().get(estado)){
+                String alfabeto = mapa[0];
+                String sig = mapa[1];
+                    
+                if(caracter != alfabeto.toCharArray()[0]){
+                    
+                    // VERIFICARA SI EXISTE EN ALGUN CONJUNTO DEL HASH
+                    boolean llaveExistente = afd.getConjuntos().containsKey(alfabeto);
+                    
+                    if(llaveExistente){
+                        List<String> arrayDeLlave = iterator(afd.getConjuntos(), alfabeto);
+                        
+                        if(arrayDeLlave.contains(String.valueOf(caracter))){
+                            estado = sig;
+                            encontrado = true;
+                            break;
+                        }
+                    }
+                    
+                    continue;
+                }
+
+                estado = sig;
+                encontrado = true;
+                break;
+            }
+                
+            if (!encontrado){
+                System.out.println("caracter invalido, no se puede hacer una transicion.");
+                break;
+            }
+        }
+                              
+        if(!afd.getEstadosA().contains(estado)){
+            System.out.println("cadena invalida, no termina en el estado de aceptacion");
+        }else{
+            System.out.println("cadena valida");
+        }
+    } 
+    
+    public static void insert(Map<String, List<String[]>> map, String key, List<String[]> entrada){
         if (map.containsKey(key)){
-            map.get(key).addAll(value);
+            map.get(key).addAll(entrada);
         } else {
-            map.put(key, value);
+            map.put(key, entrada);
         }
     }
-    
  
     public static void main(String[] args)
     {
-        /*Map<String, List<String>> colors = new HashMap<>();
- 
-        colors.put("harry", new ArrayList<>(Arrays.asList("trabajador")));
-        colors.put("White", new ArrayList<>(Arrays.asList("#FFFFFF", "#ffffff")));
-        colors.put("Red", new ArrayList<>(Arrays.asList("#FF0000", "#ff0000")));
- 
-        insert(colors, "harry", Arrays.asList("albañil"));
-        insert(colors, "harry", Arrays.asList("locutor"));
-        insert(colors, "White", Arrays.asList("#lol", "#ar"));
+        DefConjuntos conj = new DefConjuntos();
         
-        System.out.println(colors);
+        //conj.asignacionConjuntos();
         
         
-        String cadenaEntrada = "1,2,3,";
-        String[] parts = cadenaEntrada.split(",");
-        String part1 = parts[0]; // 123
-        String part2 = parts[1]; // 654321
-                
-        System.out.println("mapa impreso literalmente: "+parts);
-        for (int i = 0; i<parts.length; i++){
-            System.out.println(parts[i]);
+        
+        
+        
+        Map<String, List<String[]>> transi = new HashMap<>();
+        
+        ////
+        List<String[]> entrada0 = new ArrayList<String[]>();
+        String[] data0 = {"C", "S1"};
+        entrada0.add(data0);
+        transi.put("S0", entrada0);
+        
+        ////
+        List<String[]> entrada1 = new ArrayList<String[]>();
+        String[] data1 = {"O", "S2"};
+        entrada1.add(data1);
+        transi.put("S1", entrada1);
+        
+        ////
+        List<String[]> entrada2 = new ArrayList<String[]>();
+        String[] data2 = {"M", "S3"};
+        entrada2.add(data2);
+        transi.put("S2", entrada2);
+        
+        ////
+        List<String[]> entrada3 = new ArrayList<String[]>();
+        String[] data3 = {"P", "S4"};
+        entrada3.add(data3);
+        transi.put("S3", entrada3);
+        
+        ////
+        List<String[]> entrada4 = new ArrayList<String[]>();
+        String[] data4 = {"I", "S5"};
+        entrada4.add(data4);
+        transi.put("S4", entrada4);
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        ////
+        List<String[]> entrada5 = new ArrayList<String[]>();
+        String[] data5 = {"1", "S6"};
+        entrada5.add(data5);
+        transi.put("S5", entrada5);
+        
+        ////
+        List<String[]> entrada6 = new ArrayList<String[]>();
+        String[] data6 = {"letra", "S6"};
+        entrada6.add(data6);
+        transi.put("S6", entrada6);
+        
+        List<String[]> entrada6_1 = new ArrayList<String[]>();
+        String[] data6_1 = {"digito", "S6"};
+        entrada6_1.add(data6_1);
+        insert(transi, "S6", entrada6_1);
+        
+        List<String[]> entrada6_2 = new ArrayList<String[]>();
+        String[] data6_2 = {" ", "S6"};
+        entrada6_2.add(data6_2);
+        insert(transi, "S6", entrada6_2);
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        // CREACION DEL AFD
+        List<String> estadosAceptacion = new ArrayList<String>();
+        estadosAceptacion.add("S7");
+        AFD afdI = new AFD("prueba", "S0", estadosAceptacion, transi);
+        
+        // AGRAGAR CONJUNTOS
+        Map<String, List<String>> conjuntos = new HashMap<>();
+        List<String> letra = new ArrayList<String>();
+        letra.add("a");
+        letra.add("b");
+        letra.add("c");
+        letra.add("d");
+        letra.add("e");
+        letra.add("f");
+        letra.add("g");
+        letra.add("h");
+        letra.add("i");
+        letra.add("j");
+        letra.add("k");
+        letra.add("l");
+        letra.add("m");
+        letra.add("n");
+        letra.add("o");
+        letra.add("p");
+        letra.add("q");
+        letra.add("r");
+        letra.add("s");
+        letra.add("t");
+        letra.add("u");
+        letra.add("v");
+        letra.add("w");
+        letra.add("x");
+        letra.add("y");
+        letra.add("z");
+        
+        List<String> digito = new ArrayList<String>();
+        digito.add("0");
+        digito.add("1");
+        digito.add("2");
+        digito.add("3");
+        digito.add("4");
+        digito.add("5");
+        digito.add("6");
+        digito.add("7");
+        digito.add("8");
+        digito.add("9");
+        
+        conjuntos.put("letra", letra);
+        conjuntos.put("digito", digito);
+        
+        afdI.setConjuntos(conjuntos);
+        
+        SCanner("COMPI1 sale con 100", afdI);
+        
+        /*
+        for(Map.Entry<String, List<String[]>> mapa : colors.){
+            List<String[]> llave = mapa.getValue();
+            String[] burbuja = llave.get(0);
+            
+            System.out.println(mapa.getKey()+" -> "+burbuja[0]+" = "+ burbuja[1]);
+            
+            
         }
-        System.out.println("-----------------------");
-        boolean ve = false;
-        for(Map.Entry<String, List<String>> mapa : colors.entrySet()){
+        */
+        
+        
+        
+        
+        
+        
 
-            System.out.println(mapa.getValue());
-            
-            
-        }*/
 
         // PRUEBAS PARA LA REALIZACION DE LA TABLA DE TRANSICIONES´
         
-        // STRING OBJ->(STRING, LISTA)        
+     //System.out.println("RESULTADO  " + ((Object)p10).getClass().getSimpleName());
+        //-----------------------------------------------------------------------
+        
+        
+        //objT.returnDatos();
+   
+       // System.out.println("");
+        
+        //objT.TablaTransiciones(PrimeroRaiz);
+        
+        
+
+/*
+System.out.println("RESULTADO  " + ((Object)parts).getClass().getSimpleName());
+*/
+        
+        
+        
+        
+
+
+    }
+}
+
+
+
+/*
+
+// STRING OBJ->(STRING, LISTA)        
         List<String> p1 = new ArrayList<String>();
         p1.add("3");
         p1.add("4");
@@ -142,6 +353,10 @@ public class Base {
         objT.PROVISIONAL("14", e14);
 
        
+        
+
+
+
         //-----------------------------------------------------------------------
         
         String PrimeroRaiz = "1,2,";
@@ -155,14 +370,5 @@ public class Base {
         
         objT.TablaTransiciones(PrimeroRaiz);
 
-       
-
-/*
-System.out.println("RESULTADO  " + ((Object)parts).getClass().getSimpleName());
 */
-
-
-
-    }
-}
 

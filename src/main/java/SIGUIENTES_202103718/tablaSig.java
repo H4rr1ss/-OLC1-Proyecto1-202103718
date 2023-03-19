@@ -1,35 +1,36 @@
 package SIGUIENTES_202103718;
+import TRANSICIONES_202103718.*;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.*;
 
 public class tablaSig {
     
-    private Map<String, List<String>> tabla = new HashMap<>();
+    private Map<Integer, List<String>> tabla = new HashMap<>();
 
     // METODOS PRIVADOS---------------------------------------------
     private boolean repetidos(String clave, String valor){
         boolean ve = false;
         
-        for(Map.Entry<String, List<String>> mapa : tabla.entrySet()){
+        for(Map.Entry<Integer, List<String>> mapa : tabla.entrySet()){
        
-            if (mapa.getKey().equals(clave)){
-                for (int i = 0; i < mapa.getValue().toArray().length; i++){
-                    if(mapa.getValue().toArray()[i].equals(valor)){
-                        ve = true;
-                        return ve;
-                    }
-                }
+            if (!String.valueOf(mapa.getKey()).equals(clave)){
+                continue;
             }
+            
+            if(mapa.getValue().contains(valor)){
+                ve = true;
+                return ve;
+            }     
         }
         return ve;
     }
     
-    private void insert(Map<String, List<String>> map, String key, List<String> value) {
-        if (map.containsKey(key)){
-            map.get(key).addAll(value);
+    private void insert(Map<Integer, List<String>> map, String key, List<String> value) {
+        if (map.containsKey(Integer.parseInt(key))){
+            map.get(Integer.parseInt(key)).addAll(value);
         } else {
-            map.put(key, value);
+            map.put(Integer.parseInt(key), value);
         }
     }
     
@@ -42,10 +43,10 @@ public class tablaSig {
                     continue;
                 }
                 
-                if (tabla.containsKey(claves[i])){
+                if (tabla.containsKey(Integer.parseInt(claves[i]))){
                     insert(tabla, claves[i], Arrays.asList(valores[j]));
                 }else {
-                    tabla.put(claves[i], new ArrayList<>(Arrays.asList(valores[j])));
+                    tabla.put(Integer.parseInt(claves[i]), new ArrayList<>(Arrays.asList(valores[j])));
                 }
             }
         }
@@ -123,10 +124,10 @@ public class tablaSig {
         cadena += "\t\t\t\t\t<td bgcolor = \"#EC8E5C\" colspan = \"" + String.valueOf(tabla.size()) + "\">Siguientes Posiciones </td>\n";
         cadena += "\t\t\t\t</tr>\n\n";
 
-        for(Map.Entry<String, List<String>> mapa : tabla.entrySet()){
+        for(Map.Entry<Integer, List<String>> mapa : tabla.entrySet()){
             cadena += "\t\t\t\t<tr>\n";
             cadena += "\t\t\t\t\t<td bgcolor = \"#EC8E5C\" colspan = \"3\">"+letras[i]+"</td>\n";
-            cadena += "\t\t\t\t\t<td bgcolor = \"#EC8E5C\" >"+ mapa.getKey() +"</td>\n";
+            cadena += "\t\t\t\t\t<td bgcolor = \"#EC8E5C\" >"+ String.valueOf(mapa.getKey()) +"</td>\n";
             cadena += "\t\t\t\t\t<td colspan = \""+ String.valueOf(tabla.size()) +"\">"+mapa.getValue()+"</td>\n";
             cadena += "\t\t\t\t</tr>\n\n";
             i++;
@@ -141,6 +142,18 @@ public class tablaSig {
     
     public void limpiarMap(){
         tabla.clear();
+    }
+    
+    public void asignacionTablaTransiciones(dbTablaTransicion objetoT, String nombre){
+        String[] letras = nombre.split(",");
+        int i = 0;
+        
+        for(Map.Entry<Integer, List<String>> mapa : tabla.entrySet()){
+            objetoT.addDatosHash(String.valueOf(String.valueOf(mapa.getKey())), letras[i], mapa.getValue());
+            //System.out.println(mapa.getKey()+" = ("+letras[i]+", "+mapa.getValue()+")");
+            i++;
+
+        }
     }
     
 }

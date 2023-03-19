@@ -4,228 +4,33 @@ digraph H {
 		shape=plaintext
 		label=<
 			<table border='1' cellborder='1'>
-
 				<tr>
-					<td bgcolor = "#EC8E5C" colspan="1" rowspan= "2">Estado</td>
-					<td bgcolor = "#EC8E5C" colspan= "20">Terminales</td>
+					<td bgcolor = "#EC8E5C" colspan = "4">HOJA</td>
+					<td bgcolor = "#EC8E5C" colspan = "4">Siguientes Posiciones </td>
 				</tr>
 
 				<tr>
-					<td bgcolor = "#F9D1E0" >minuscula</td>
-					<td bgcolor = "#F9D1E0" >mayuscula</td>
-					<td bgcolor = "#F9D1E0" >simbolos</td>
-					<td bgcolor = "#F9D1E0" >numero</td>
-					<td bgcolor = "#F9D1E0" >@</td>
-					<td bgcolor = "#F9D1E0" >.</td>
-					<td bgcolor = "#F9D1E0" >c</td>
-					<td bgcolor = "#F9D1E0" >o</td>
-					<td bgcolor = "#F9D1E0" >m</td>
+					<td bgcolor = "#EC8E5C" colspan = "3">letra</td>
+					<td bgcolor = "#EC8E5C" >1</td>
+					<td colspan = "4">[3, 4]</td>
 				</tr>
 
 				<tr>
-					<td>S0[1, 2]</td>
-					
-					<td>S1</td>
-					<td>S1</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-			
+					<td bgcolor = "#EC8E5C" colspan = "3">2</td>
+					<td bgcolor = "#EC8E5C" >2</td>
+					<td colspan = "4">[3, 4]</td>
 				</tr>
 
 				<tr>
-					<td>S1[3, 4, 5, 6]</td>
-					<td>--</td>
-					<td>--</td>
-					<td>S2</td>
-					<td>S2</td>
-					<td>S2</td>
-					<td>S2</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
+					<td bgcolor = "#EC8E5C" colspan = "3">nums</td>
+					<td bgcolor = "#EC8E5C" >3</td>
+					<td colspan = "4">[3, 4]</td>
 				</tr>
 
 				<tr>
-					<td>S2[3, 4, 5, 6, 7]</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>S2</td>
-					<td>S2</td>
-					<td>S2</td>
-					<td>S2</td>
-					<td>S3</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-				</tr>
-
-				<tr>
-					<td>S3[8, 9]</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>S4</td>
-					<td>S4</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-				</tr>
-
-				<tr>
-					<td>S4[8, 9, 10]</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>S4</td>
-					<td>S4</td>
-					<td>S5</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-				</tr>
-
-				<tr>
-					<td>S5[11]</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>S6</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-				</tr>
-
-				<tr>
-					<td>S6[12]</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>S7</td>
-					<td>--</td>
-					<td>--</td>
-				</tr>
-
-				<tr>
-					<td>S7[13]</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>S8</td>
-					<td>--</td>
-				</tr>
-
-				<tr>
-					<td>*S8[14]</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td>--</td>
-					<td></td>
+					<td bgcolor = "#EC8E5C" colspan = "3">#</td>
+					<td bgcolor = "#EC8E5C" >4</td>
+					<td colspan = "4">[-]</td>
 				</tr>
 
 			</table>

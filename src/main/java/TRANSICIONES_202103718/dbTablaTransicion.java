@@ -1,8 +1,11 @@
 package TRANSICIONES_202103718;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class dbTablaTransicion {
     private HashMap<String, elementHash> tabla = new HashMap<>();       // TABLA GENERAL
@@ -18,21 +21,31 @@ public class dbTablaTransicion {
         tabla.put(nodo, obj);
     }
     
+    public void limipiarMap_t(){
+        tabla.clear();
+        transicionP.clear();
+        listadoF.clear();
+        estadosA.clear();
+        evaluacionEstados.clear();
+        this.indice = 0;
+        this.llave = true;
+    }
     
     // SOLO SERVIRA PARA REALIZAR LAS PRUEBAS DE ESTA CLASE
     public void PROVISIONAL(String nodo, elementHash objeto){
         tabla.put(nodo, objeto);
     }
     
-    public void returnDatos(){
+    /*public void returnDatos(){
         for(Map.Entry<String, elementHash> mapa : tabla.entrySet()){
             indice = 2;
             System.out.println(mapa.getKey()+" = "+ mapa.getValue().getSimbolo()+", "+mapa.getValue().getSiguientes());
         }
-    }
+    }*/
     
     
     public void returnDatosFinales(){
+        System.out.println("\n----------------------- TABLA DE TRANSICIONES-----------------------\n");
         for(transicion cadena :listadoF) {
             System.out.println("Tran["+cadena.getEstadoI()+", "+ cadena.getSimbolo()+"] = "+cadena.getSigEvaluar()+" = "+cadena.getEstadoF()+"("+cadena.isAcept()+")");
         }
@@ -43,59 +56,17 @@ public class dbTablaTransicion {
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    private String verificarExistSigPos(List<String> listaSig){// SE COMPARA EL HASH DE TRANSICIONES CON LA LISTA SIGUIENTE Y RETORMA EL ESTADOFINAL
-        if(transicionP.isEmpty()){//////////////////////////////////////////////////////////
+    // SE COMPARA EL HASH DE TRANSICIONES CON LA LISTA SIGUIENTE Y RETORMA EL ESTADOFINAL
+    private String verificarExistSigPos(List<String> listaSig){
+        if(transicionP.isEmpty()){
             return "";
         }
         
         for(Map.Entry<String, List<String>> tablaF : transicionP.entrySet()){
-            int contador = 0;
-
-            for(Object cadena :tablaF.getValue().toArray()) {// ARRAY BASE
-                
-                for(String sig : listaSig){ // LISTA SIGUIENTESS
-                    if(cadena.equals(sig)){
-                        contador++;//agregar break
-                        break;
-                    }
-                }   
-            }
             
-                    
-            if (listaSig.size() == tablaF.getValue().toArray().length &&  contador == listaSig.size()){
+            boolean EstadoExistente = Objects.equals(listaSig, tablaF.getValue());
+            
+            if(EstadoExistente){
                 return tablaF.getKey();
             }
             
@@ -103,16 +74,7 @@ public class dbTablaTransicion {
         return "";
     }
     
-    
-    private Boolean aceptacionAux(List<String> listaAceptacion, String estadoF){
-        for(String li: listaAceptacion){
-            if(li.equals(estadoF)){
-                return true;
-            }
-        }
-        return false;
-    }
-    
+    // COLOCARA SI EL LISTADO DE NODOS CONTIENE EL NODO DE NUMERAL ENTONCES SERA ACEPTACION
     private Boolean aceptacion(List<String> listaSig, String estadoF, String estadoI){
         
         for(Map.Entry<String, elementHash> mapa : tabla.entrySet()){
@@ -122,49 +84,46 @@ public class dbTablaTransicion {
             
             //ME DEVUELVE EL NODO EN QUE SE ENCUENTRA "#"  estadosA
             for(String li: listaSig){
-                if(li.equals(mapa.getKey())){
-                    
-                    if(aceptacionAux(estadosA, estadoF)){
-                        continue;
-                    }
-                    estadosA.add(estadoF);
+                if((!li.equals(mapa.getKey())) || estadosA.contains(estadoF)){
+                    continue;
                 }
+                
+                estadosA.add(estadoF);
             }
-
         }
         
-        for(String estadosA: estadosA){
-            if(estadosA.equals(estadoI)){
-                return true;
-            }
+        if(estadosA.contains(estadoI)){
+            return true;
         }
-            
         return false;
     }
     
-    private List<String> rep(List<String> listaF, List<String> listaC){
-        if(listaF.isEmpty()){
-            for(int i = 0; i<listaC.size(); i++){
-                listaF.add(listaC.get(i));
+    // TOMA LOS NODOS DEL SIMBOLO DE ENTRADA Y SI SE REPITE MAS DE 2 VECES, UNE ESE ARRAY
+    private List<String> nuevaListaNodos(List<String> listaFinal, List<String> listaComparar){
+        if(listaFinal.isEmpty()){
+            for(int i = 0; i<listaComparar.size(); i++){
+                listaFinal.add(listaComparar.get(i));
             }
             
         }else{
-            for(int i = 0; i<listaC.size(); i++){
+            for(int i = 0; i<listaComparar.size(); i++){
                 int data = 0;
                 
-                for(int j = 0; j<listaF.size(); j++){
-                    if(listaC.get(i).equals(listaF.get(j))){
+                for(int j = 0; j<listaFinal.size(); j++){
+                    if(listaComparar.get(i).equals(listaFinal.get(j))){
                         data++;
                     }
                 }
+                
                 if(data == 0){
-                    listaF.add(listaC.get(i));
+                    listaFinal.add(listaComparar.get(i));
                 }
             }
         }
-        return listaF;
+        return listaFinal;
     }
     
+    // ELIMINA LOS NODOS ANALIZADOS DE LA TABLA AZUL
     private void eliminados(String eliminar, Map<String, elementHash> hashEvaluar){
         String[] eliminados = eliminar.split(",");
         
@@ -184,18 +143,18 @@ public class dbTablaTransicion {
         }
     }
     
+    // VERIFICARA SI ESE ESTADO FINAL YA EXISTE ANTERIORMENTE, SI NO CREARÁ UNO NUEVO
     private String asignarEstadoF(String estado, String EstadoF, List<String> ListaSig){
         if (this.indice !=0){
-            estado = verificarExistSigPos(ListaSig);// ACA IRA estadoF = [tablaSig]//////////////////////////////////////////////////////////
+            estado = verificarExistSigPos(ListaSig);// ACA IRA estadoF = [tablaSig]
         }
         
         if (estado.equals("")){
-            //SI ES TRUE ENTONCES
-            EstadoF = "S"+String.valueOf(this.indice+1); //REPRESENTA EL ESTADO IGUALADO AL FINAL
+            EstadoF = "S"+String.valueOf(this.indice+1); 
             this.indice++;
             return EstadoF;
         }
-        EstadoF = estado; //REPRESENTA EL ESTADO IGUALADO AL FINAL
+        EstadoF = estado; 
         return EstadoF;
     }
     
@@ -205,18 +164,10 @@ public class dbTablaTransicion {
         }
         
         for(int i = 0; i < evaluacionEstados.size(); i++){
-            
-            int contador = 0;
-            for(int j = 0; j < evaluacionEstados.get(i).size(); j++){
+               
+            boolean sonIguales = Objects.equals(evaluacionEstados.get(i), nodos);
                 
-                for(int h = 0; h < nodos.size(); h++){
-                    if(evaluacionEstados.get(i).get(j).equals(nodos.get(h))){
-                        contador++;
-                    }
-                }
-            }
-            
-            if (evaluacionEstados.get(i).size() == nodos.size() && contador == nodos.size()){
+            if (sonIguales){
                 return true;
             }
         }
@@ -245,6 +196,7 @@ public class dbTablaTransicion {
                     listadoF.get(i).setEvaluacion(true);
                     continue;
                 }
+                
                 listadoF.get(i).setEvaluacion(true);
                 evaluacionEstados.add(listadoF.get(i).getNodos());
                 int numeral = 0;
@@ -261,7 +213,7 @@ public class dbTablaTransicion {
                 }
                 
                 String[] S0 = nodos.split(",");
-                System.out.println(S0.length + "numeral: "+ numeral);
+
                 if(S0.length == 1 && S0[0].equals("") && numeral == 1){
                     String EstadoI = finalEstado();
                     transicion objTransiciones = new transicion(EstadoI, "", null, "", true);
@@ -275,15 +227,21 @@ public class dbTablaTransicion {
         }
     }
     
+    // COLOCA LA LISTA DE NODOS CON QUE SE EVALUA UN ESTADO -> S0[va a evaluar]
     private List<String> sigGraphviz(Map<String, elementHash> hashEvaluar){
         List<String> SigPorAnalizar = new ArrayList<String>();
         
-        for(Map.Entry<String, elementHash> mapAux : hashEvaluar.entrySet()){
-            SigPorAnalizar.add(mapAux.getKey());
+        for(Map.Entry<String, elementHash> tablaAzul : hashEvaluar.entrySet()){
+            SigPorAnalizar.add(tablaAzul.getKey());
         }
-        
         return SigPorAnalizar;
     }
+    
+    
+    
+    
+    
+    
     
     // LOGICA FINAL PARA TABLA DE TRANSICIONES
     private void SeleccionNodos(String[] S0){//S0 = 1,2,3,4,5,6
@@ -299,47 +257,42 @@ public class dbTablaTransicion {
                     break;
                 }
                 
-                String eliminadosS = "";
-                boolean sigNodo = false;
+                String NodosYaUtilizados_tablaAzul = "";
+                boolean nodoEvaluar = false;
                 List<String> ListaSig = new ArrayList<String>();
                 List<String> listaF = new ArrayList<String>();
                 
                 for(Map.Entry<String, elementHash> mapAux : hashEvaluar.entrySet()){
 
                     if(mapaBase.getKey().equals(mapAux.getKey())){      
-                        sigNodo = true;
-                        ListaSig = rep(listaF, mapAux.getValue().getSiguientes());// ALMACENA LOS NUEVOS SIGPOS
-                        eliminadosS += mapAux.getKey()+",";
+                        nodoEvaluar = true;
+                        ListaSig = nuevaListaNodos(listaF, mapAux.getValue().getSiguientes());// ALMACENA LOS NUEVOS SIGPOS
+                        NodosYaUtilizados_tablaAzul += mapAux.getKey()+",";
                     }
                 }
                 
-                if (!sigNodo){
+                if (!nodoEvaluar){
                     continue;
                 }
+                
                 List<String> SigPorAnalizar = new ArrayList<String>();
                 SigPorAnalizar = sigGraphviz(hashEvaluar);
-                eliminados(eliminadosS, hashEvaluar);
+                eliminados(NodosYaUtilizados_tablaAzul, hashEvaluar);
                 String EstadoF = "";
                 String estado = "";
                 
-                //VERIFICAR SI LA LISTA DE SIGUIENTES YA EXISTE ENTONCES NO SE CREA NUEVO ESTADO
-                EstadoF = asignarEstadoF(estado, EstadoF, ListaSig);//////////////////////////////////////////////////////////
-                       
-                String EstadoI = "S"+String.valueOf(indiceI); //ASIGNA UN ESTADO INICIAL INICIA EN 0
-                String simbolo = mapaBase.getValue().getSimbolo();//OBTIENE EL SIMBOLO QUE SE EVALUO
-                        
-                boolean acept = aceptacion(ListaSig, EstadoF, EstadoI);//VERIFICA SI EL NODO # SE ENCUENTRA EN LOS NODOS SIGPOS
+                EstadoF = asignarEstadoF(estado, EstadoF, ListaSig);
+                String EstadoI = "S"+String.valueOf(indiceI); 
+                String simbolo = mapaBase.getValue().getSimbolo();
+                boolean acept = aceptacion(ListaSig, EstadoF, EstadoI);
                        
                 transicionP.put(EstadoF, ListaSig);
                 transicion objTransiciones = new transicion(EstadoI, simbolo, ListaSig, EstadoF, acept);
-                //transicion objTransiciones = new transicion(EstadoF, "", "", "", true);
                 objTransiciones.setSigEvaluar(SigPorAnalizar);
-                
                 this.listadoF.add(objTransiciones);
             }
             
             indiceI++;
-            // VERIFICARA SI HAY ESTADOS POR CREAR Y SE RELLENARA EL HASHMAP (hashEvaluar)
             rellenohashEvaluar(hashEvaluar);
             
             if(hashEvaluar.isEmpty()){
@@ -362,59 +315,74 @@ public class dbTablaTransicion {
         
         return estado;
     }
-    
-    /*private Boolean auxRe(List<String> li, String estado){
-        int contador = 0;
         
-        for(String l :li) {
-            if(l.equals(estado)){
-                contador++;
+ 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // ------------------------------------------- GRAPHVIZ -------------------------------------------
+    
+    //                              FUNCIONES EXTRA PARA LA CREACION DEL GRAFO 
+
+    // DEVUELVE EL TAMAÑO QUE DEBE DE TENER LA FILA DE LA PALABRA "TERMINALES" EN EL GRAFO
+    private int sizeEncabezado(){
+        List<String> rep = new ArrayList<String>();
+        
+        for(Map.Entry<String, elementHash> t : tabla.entrySet()){
+            if(rep.contains(t.getValue().getSimbolo())){
+                continue;
             }
+            rep.add(t.getValue().getSimbolo());
         }
-        if (contador == 1){
-            return true;
-        }
-        return false;
-    }*/
+        return rep.size();
+    }
     
-    
-    private String AuxGr(String estadoI, List<String> terminales, List<String> saltar){//ESTO ES PARA LO TERMINALES
+    // LLENADO DE FILAS DE CADA ESTADO INICIAL S0[a,b, ...] ------>
+    private String llenadoDeFilas_Sn(String estadoI, List<String> terminales, List<String> saltar){
         String t = "";
         
         for(String terminal: terminales){
             if(terminal.equals("")){
                 continue;
             }
-            String agregado = termRepp(terminal, estadoI, saltar);
+            
+            String agregado = busquedaDeTerminal(terminal, estadoI, saltar);
             
             if(agregado != ""){
                 t += agregado;
                 continue;
             }
             t += "\t\t\t\t\t<td>--</td>\n";
-            
         }
-        System.out.println("\n"+t);
         return t;
     }
     
-    private Boolean m(List<String> lista, String esI){
-        for(String u: lista){
-                if(u.equals(esI)){
-                    return true;
-                }
-            }
-        return false;
-    }
-    
-    private String termRepp(String terminal, String estadoI, List<String> saltar){     
+    private String busquedaDeTerminal(String terminal, String estadoI, List<String> saltar){     
         String t = "";
         
         for(transicion tr: listadoF){
-            if(m(saltar, tr.getEstadoI())){
+            
+            if(saltar.contains(tr.getEstadoI())){
                 continue;
             }
-
+            
             if(tr.getEstadoI().equals(estadoI) && tr.getSimbolo().equals(terminal)){
                 t += "\t\t\t\t\t<td>"+ tr.getEstadoF() +"</td>\n";
                 break;
@@ -427,29 +395,56 @@ public class dbTablaTransicion {
         return t;
     }
     
-    private Boolean termRep(List<String> terminales, String simbolo){
-        for(String t: terminales){
-            if(t.equals(simbolo)){
-                return true;
+    // CREACION DE ARCHIVO DOT E IMAGEN PNG ------>
+    private void graficarF(String nombre, String graphviz){
+        FileWriter fichero = null;
+        PrintWriter pw = null;
+        try {
+            fichero = new FileWriter("src/main/java/TRANSICIONES_202103718/" + nombre + ".dot");
+            pw = new PrintWriter(fichero);
+            pw.println(graphviz);
+
+        } catch (Exception e) {
+            System.out.println("error, no se realizo el archivo"+e);
+        } finally {
+            try {
+                if (null != fichero) {
+                    fichero.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
             }
         }
-        return false;
-    }
-    
-    private int sizeEncabezado(){
-        List<String> rep = new ArrayList<String>();
-        
-        for(Map.Entry<String, elementHash> t : tabla.entrySet()){
-            if(rep.contains(t.getValue().getSimbolo())){
-                continue;
-            }
-            rep.add(t.getValue().getSimbolo());
+        //para compilar el archivo dot y obtener la imagen
+        try {
+            //dirección doonde se ecnuentra el compilador de graphviz
+            String dotPath = "C:\\Program Files\\Graphviz\\bin\\dot.exe";
+            //dirección del archivo dot
+            String fileInputPath = "src/main/java/TRANSICIONES_202103718/" + nombre + ".dot";
+            //dirección donde se creara la magen
+            String fileOutputPath = "src/main/java/TRANSICIONES_202103718/" + nombre + ".jpg";
+            //tipo de conversón
+            String tParam = "-Tjpg";
+            String tOParam = "-o";
+
+            String[] cmd = new String[5];
+            cmd[0] = dotPath;
+            cmd[1] = tParam;
+            cmd[2] = fileInputPath;
+            cmd[3] = tOParam;
+            cmd[4] = fileOutputPath;
+
+            Runtime rt = Runtime.getRuntime();
+
+            rt.exec(cmd);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
         }
-        
-        return rep.size();
     }
     
-    
+    // CREACION DEL ARCHIVO DOT ----------->
     private String graphviz(){
         List<String> repetidos = new ArrayList<String>();
         
@@ -466,17 +461,17 @@ public class dbTablaTransicion {
         t += "\t\t\t\t\t<td bgcolor = \"#EC8E5C\" colspan= \""+String.valueOf(sizeEncabezado()-1)+"\">Terminales</td>\n";
         t += "\t\t\t\t</tr>\n\n";
 
-        ////////////////////////////////////////////////////////
+        // ***************************** COLOCACION DE LOS TERMINALES (FILA) *****************************
         t += "\t\t\t\t<tr>\n";
         
         List<String> terminales = new ArrayList<String>();
         terminales.add("");
         for(transicion objec :listadoF) {
             
-            if(termRep(terminales, objec.getSimbolo())){
+            if(terminales.contains(objec.getSimbolo())){
                 continue;
             }
-            
+
             if(objec.getSimbolo().equals(" ")){
                 t += "\t\t\t\t\t<td bgcolor = \"#F9D1E0\" >\" \"</td>\n";
                 terminales.add(objec.getSimbolo());
@@ -486,19 +481,15 @@ public class dbTablaTransicion {
             terminales.add(objec.getSimbolo());
             t += "\t\t\t\t\t<td bgcolor = \"#F9D1E0\" >"+ objec.getSimbolo() +"</td>\n";
         }
-        t += "\t\t\t\t</tr>\n\n";
-
-        ////////////////////////////////////////////////////////
+        t += "\t\t\t\t</tr>\n\n";//**********************************************************************
+        
+        // ************************* LLENADO DE TERMINALES CON SU ESTADO FINAL **************************
         List<String> veri = new ArrayList<String>();
         for(transicion objec1 :listadoF) {
             
             if(repetidos.contains(objec1.getEstadoI())){
                 continue;
             }
-            
-            /*if(auxRe(repetidos, objec1.getEstadoI())){
-                continue;
-            }*/
             
             repetidos.add(objec1.getEstadoI());
             
@@ -510,30 +501,91 @@ public class dbTablaTransicion {
                 t += "\t\t\t\t\t<td>"+ objec1.getEstadoI()+ objec1.getSigEvaluar() +"</td>\n";
             }
                         
-            t += AuxGr(objec1.getEstadoI(), terminales, veri);
+            t += llenadoDeFilas_Sn(objec1.getEstadoI(), terminales, veri);
             veri.add(objec1.getEstadoI());
             
             t += "\t\t\t\t</tr>\n\n";
-        }
-        ////////////////////////////////////////////////////////
-
+        }// **********************************************************************************************
+        
         t += "\t\t\t</table>\n";
         t += "\t>];\n\n";
 
         t += "}";
         return t;
     }
+    // -----------------------------------------FIN GRAPHVIZ-----------------------------------------------------
     
-    public void TablaTransiciones(String estadoI){
-        String[] S0 = estadoI.split(",");// {1,2,3,4,5,6}
-        SeleccionNodos(S0);
-        System.out.println("\n\n");
-        returnDatosFinales();
-        System.out.println("\n\n--------GRAPHVIZ--------\n"+graphviz()+"\n");
+    private void insert(Map<String, List<String[]>> map, String key, List<String[]> entrada){
+        if (map.containsKey(key)){
+            map.get(key).addAll(entrada);
+        } else {
+            map.put(key, entrada);
+        }
+    }
+    
+    private void armadoTransiciones(Map<String, List<String[]>> transiciones, String estadoI){
+        
+        for(transicion tr: listadoF){
+            
+            if(!tr.getEstadoI().equals(estadoI) || tr.getNodos() == null){
+                continue;
+            }
+            
+            List<String[]> contenidoTransiones = new ArrayList<String[]>();
+            String[] data = {tr.getSimbolo(), tr.getEstadoF()};
+            contenidoTransiones.add(data);
+            insert(transiciones, tr.getEstadoI(), contenidoTransiones);
+        }
+        
+    }
+    
+    /*
+        ESTA FUNCION RETORNARA UN HASH DE TRANSICIONES QUE
+        SE DEBE INGRESAR EN EL OBJETO AFD
+    */
+    public Map<String, List<String[]>> modificacionTransiciones(){
+        Map<String, List<String[]>> transiciones = new HashMap<>();
+        List<String> estados = new ArrayList<String>();
+        
+        for(transicion t: listadoF){
+            if(estados.contains(t.getEstadoI())){
+                continue;
+            }// [S0,S1,S2,S3,S4,S5,S6,S7,S8]
+            estados.add(t.getEstadoI());
+        }
+        
+        for(String estado: estados){
+            armadoTransiciones(transiciones, estado);
+        }
+        
+        return transiciones;
+    }
+    
+    public List<String> estadosDeAceptacion(){
+        List<String> estados = new ArrayList<String>();
+        
+        for(transicion tr: listadoF){
+            if(tr.isAcept()){
+                if(estados.contains(tr.getEstadoI())){
+                    continue;
+                }
+                estados.add(tr.getEstadoI());
+            }
+        }
+        
+        return estados;
     }
     
     
+    public void TablaTransiciones(String estadoI, String nombre){
+        String[] S0 = estadoI.split(",");// {1,2,3,4,5,6}
+        SeleccionNodos(S0);
+        returnDatosFinales();
+        graficarF(nombre, graphviz());
+    }
 }
+
+
 
 
 
