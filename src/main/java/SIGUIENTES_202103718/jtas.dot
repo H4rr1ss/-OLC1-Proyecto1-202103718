@@ -1,0 +1,33 @@
+digraph H {
+
+	parent [
+		shape=plaintext
+		label=<
+			<table border='1' cellborder='1'>
+				<tr>
+					<td bgcolor = "#EC8E5C" colspan = "4">HOJA</td>
+					<td bgcolor = "#EC8E5C" colspan = "3">Siguientes Posiciones </td>
+				</tr>
+
+				<tr>
+					<td bgcolor = "#EC8E5C" colspan = "3">\"</td>
+					<td bgcolor = "#EC8E5C" >1</td>
+					<td colspan = "3">[3]</td>
+				</tr>
+
+				<tr>
+					<td bgcolor = "#EC8E5C" colspan = "3">\"</td>
+					<td bgcolor = "#EC8E5C" >2</td>
+					<td colspan = "3">[3]</td>
+				</tr>
+
+				<tr>
+					<td bgcolor = "#EC8E5C" colspan = "3">#</td>
+					<td bgcolor = "#EC8E5C" >3</td>
+					<td colspan = "3">[-]</td>
+				</tr>
+
+			</table>
+	>];
+
+}

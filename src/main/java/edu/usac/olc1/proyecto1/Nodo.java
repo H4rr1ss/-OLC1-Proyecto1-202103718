@@ -88,7 +88,16 @@ public class Nodo {
     public String getCodigoInterno(){
         String etiqueta;
         if (hizq == null && hder == null){
-            etiqueta = "nodo"+ id +"[ label = \"" + primero+"|{"+anulable+"|"+valor+"|"+identificador+"}|"+ultimo+"\"];\n";
+            if(valor.equals("\\n")){
+                etiqueta = "nodo"+ id +"[ label = \"" + primero+"|{"+anulable+"|\\\\n|"+identificador+"}|"+ultimo+"\"];\n";
+            }else if(valor.equals("\'")){
+                etiqueta = "nodo"+ id +"[ label = \"" + primero+"|{"+anulable+"|'|"+identificador+"}|"+ultimo+"\"];\n";
+            }else if(valor.equals("\\\"")){
+                etiqueta = "nodo"+ id +"[ label = \"" + primero+"|{"+anulable+"|\\\"|"+identificador+"}|"+ultimo+"\"];\n";
+            }else{
+                etiqueta = "nodo"+ id +"[ label = \"" + primero+"|{"+anulable+"|"+valor+"|"+identificador+"}|"+ultimo+"\"];\n";
+            }
+             
             
         } else{
             if (valor.equals("|")){

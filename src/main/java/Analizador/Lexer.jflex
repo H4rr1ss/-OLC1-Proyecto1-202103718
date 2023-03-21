@@ -50,7 +50,8 @@ import java.util.LinkedList;
 <YYINITIAL> [a-z] {return new Symbol( sym.LETMIN, yyline, yycolumn, yytext()); }
 <YYINITIAL> [A-Z] {return new Symbol( sym.LETMAY, yyline, yycolumn, yytext()); }
 <YYINITIAL> [0-9]+ {return new Symbol( sym.DIG, yyline, yycolumn, yytext()); }
-<YYINITIAL> \"([a-zA-Z_ ]|[0-9]|[\| \# \$ \% \& \' \( \) \' \+ \, \- \. \/ \: \; \< \= \> \? \@ \[ \\ \] \^ \_ \{ \| \} \\])*\.?[0-9]*\" {return new Symbol( sym.STR, yyline, yycolumn, yytext()); }
+<YYINITIAL> (\\"n"|\\\'|"\\""\"")  {return new Symbol( sym.SIMB, yyline, yycolumn, yytext()); }
+<YYINITIAL> \"([a-zA-Z_ ]|[0-9]|\\\"|[\| \# \$ \% \& \' \( \) \' \+ \, \- \. \/ \: \; \< \= \> \? \@ \[ \\ \] \^ \_ \{ \| \} \\])*\.?[0-9]*\" {return new Symbol( sym.STR, yyline, yycolumn, yytext()); }
 <YYINITIAL> "CONJ" {return new Symbol(sym.NCONJ, yyline, yycolumn, yytext()); }
 <YYINITIAL> [a-zA-Z][a-zA-Z_|0-9]* {return new Symbol( sym.VARIABLE, yyline, yycolumn, yytext()); }
 <YYINITIAL> "{" {return new Symbol(sym.LLAVE_A, yyline, yycolumn, yytext()); }
@@ -97,11 +98,3 @@ import java.util.LinkedList;
                 System.out.println("-1-1-1-1-1-");
                 t.TablaDeErrores(cadena);
                 }
-
-
-
-
-
-
-
-

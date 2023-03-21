@@ -25,48 +25,48 @@ public class Base {
     public static void SCanner(String cadena, AFD afd){
         
         String estado = afd.getEstadoI();
-        for(char caracter: cadena.toCharArray()){
+            for(char caracter: cadena.toCharArray()){
 
-            boolean encontrado = false;
-                
-            for(String[] mapa : afd.getTransiciones().get(estado)){
-                String alfabeto = mapa[0];
-                String sig = mapa[1];
-                    
-                if(caracter != alfabeto.toCharArray()[0]){
-                    
-                    // VERIFICARA SI EXISTE EN ALGUN CONJUNTO DEL HASH
-                    boolean llaveExistente = afd.getConjuntos().containsKey(alfabeto);
-                    
-                    if(llaveExistente){
-                        List<String> arrayDeLlave = iterator(afd.getConjuntos(), alfabeto);
-                        
-                        if(arrayDeLlave.contains(String.valueOf(caracter))){
-                            estado = sig;
-                            encontrado = true;
-                            break;
+                boolean encontrado = false;
+
+                for(String[] mapa : afd.getTransiciones().get(estado)){
+                    String alfabeto = mapa[0];
+                    String sig = mapa[1];
+
+                    if(caracter != alfabeto.toCharArray()[0]){
+
+                        // VERIFICARA SI EXISTE EN ALGUN CONJUNTO DEL HASH
+                        boolean llaveExistente = afd.getConjuntos().containsKey(alfabeto);
+
+                        if(llaveExistente){
+                            List<String> arrayDeLlave = iterator(afd.getConjuntos(), alfabeto);
+
+                            if(arrayDeLlave.contains(String.valueOf(caracter))){
+                                estado = sig;
+                                encontrado = true;
+                                break;
+                            }
                         }
+
+                        continue;
                     }
-                    
-                    continue;
+
+                    estado = sig;
+                    encontrado = true;
+                    break;
                 }
 
-                estado = sig;
-                encontrado = true;
-                break;
+                if (!encontrado){
+                    System.out.println("Caracter invalido <"+caracter+">, no se puede hacer una transicion.");
+                    break;
+                }
             }
-                
-            if (!encontrado){
-                System.out.println("caracter invalido, no se puede hacer una transicion.");
-                break;
+
+            if(!afd.getEstadosA().contains(estado)){
+                System.out.println("cadena invalida, no termina en el estado de aceptacion");
+            }else{
+                System.out.println("cadena valida");
             }
-        }
-                              
-        if(!afd.getEstadosA().contains(estado)){
-            System.out.println("cadena invalida, no termina en el estado de aceptacion");
-        }else{
-            System.out.println("cadena valida");
-        }
     } 
     
     public static void insert(Map<String, List<String[]>> map, String key, List<String[]> entrada){
@@ -87,69 +87,82 @@ public class Base {
         
         
         
-        Map<String, List<String[]>> transi = new HashMap<>();
+        /*Map<String, List<String[]>> transi = new HashMap<>();
         
         ////
         List<String[]> entrada0 = new ArrayList<String[]>();
-        String[] data0 = {"C", "S1"};
+        String[] data0 = {"minuscula", "S1"};
+        String[] data01 = {"mayuscula", "S1"};
         entrada0.add(data0);
+        entrada0.add(data01);
         transi.put("S0", entrada0);
+        
         
         ////
         List<String[]> entrada1 = new ArrayList<String[]>();
-        String[] data1 = {"O", "S2"};
+        String[] data1 = {"minuscula", "S2"};
+        String[] data11 = {"mayuscula", "S2"};
+        String[] data12 = {"simbolos", "S2"};
+        String[] data13 = {"numero", "S2"};
         entrada1.add(data1);
+        entrada1.add(data11);
+        entrada1.add(data12);
+        entrada1.add(data13);
         transi.put("S1", entrada1);
         
         ////
         List<String[]> entrada2 = new ArrayList<String[]>();
-        String[] data2 = {"M", "S3"};
+        String[] data2 = {"minuscula", "S2"};
+        String[] data21 = {"mayuscula", "S2"};
+        String[] data22 = {"simbolos", "S2"};
+        String[] data23 = {"numero", "S2"};
+        String[] data24 = {"@", "S3"};
         entrada2.add(data2);
+        entrada2.add(data21);
+        entrada2.add(data22);
+        entrada2.add(data23);
+        entrada2.add(data24);
         transi.put("S2", entrada2);
         
         ////
         List<String[]> entrada3 = new ArrayList<String[]>();
-        String[] data3 = {"P", "S4"};
+        String[] data3 = {"minuscula", "S4"};
+        String[] data31 = {"mayuscula", "S4"};
         entrada3.add(data3);
+        entrada3.add(data31);
         transi.put("S3", entrada3);
         
         ////
         List<String[]> entrada4 = new ArrayList<String[]>();
-        String[] data4 = {"I", "S5"};
+        String[] data4 = {"minuscula", "S4"};
+        String[] data41 = {"mayuscula", "S4"};
+        String[] data42 = {".", "S5"};
         entrada4.add(data4);
+        entrada4.add(data41);
+        entrada4.add(data42);
         transi.put("S4", entrada4);
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         
         ////
         List<String[]> entrada5 = new ArrayList<String[]>();
-        String[] data5 = {"1", "S6"};
+        String[] data5 = {"c", "S6"};
         entrada5.add(data5);
         transi.put("S5", entrada5);
         
         ////
         List<String[]> entrada6 = new ArrayList<String[]>();
-        String[] data6 = {"letra", "S6"};
+        String[] data6 = {"o", "S7"};
         entrada6.add(data6);
         transi.put("S6", entrada6);
         
         List<String[]> entrada6_1 = new ArrayList<String[]>();
-        String[] data6_1 = {"digito", "S6"};
+        String[] data6_1 = {"m", "S8"};
         entrada6_1.add(data6_1);
-        insert(transi, "S6", entrada6_1);
+        insert(transi, "S7", entrada6_1);
         
         List<String[]> entrada6_2 = new ArrayList<String[]>();
-        String[] data6_2 = {" ", "S6"};
+        String[] data6_2 = {"", ""};
         entrada6_2.add(data6_2);
-        insert(transi, "S6", entrada6_2);
+        insert(transi, "S8", entrada6_2);
         
         
         
@@ -164,7 +177,7 @@ public class Base {
         
         // CREACION DEL AFD
         List<String> estadosAceptacion = new ArrayList<String>();
-        estadosAceptacion.add("S7");
+        estadosAceptacion.add("S8");
         AFD afdI = new AFD("prueba", "S0", estadosAceptacion, transi);
         
         // AGRAGAR CONJUNTOS
@@ -209,12 +222,22 @@ public class Base {
         digito.add("8");
         digito.add("9");
         
-        conjuntos.put("letra", letra);
-        conjuntos.put("digito", digito);
+        List<String> simbolos = new ArrayList<String>();
+        simbolos.add("-");
+        simbolos.add("_");
+        
+        String abcMayus = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,Ñ,O,P,Q,R,S,T,U,V,W,X,Y,Z"; 
+        List<String> lista_ABC = Arrays.asList(abcMayus.split(","));
+        
+        
+        conjuntos.put("minuscula", letra);
+        conjuntos.put("numero", digito);
+        conjuntos.put("mayuscula", lista_ABC);
+        conjuntos.put("simbolos", simbolos);
         
         afdI.setConjuntos(conjuntos);
         
-        SCanner("COMPI1 sale con 100", afdI);
+        SCanner("lachalana666@ingusac.com", afdI);*/
         
         /*
         for(Map.Entry<String, List<String[]>> mapa : colors.){

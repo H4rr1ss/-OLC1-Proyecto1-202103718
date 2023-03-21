@@ -527,7 +527,7 @@ public class dbTablaTransicion {
         
         for(transicion tr: listadoF){
             
-            if(!tr.getEstadoI().equals(estadoI) || tr.getNodos() == null){
+            if(!tr.getEstadoI().equals(estadoI)){
                 continue;
             }
             

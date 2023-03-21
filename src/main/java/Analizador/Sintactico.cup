@@ -77,7 +77,7 @@ parser code {:
 
 
 
-terminal NCONJ, LLAVE_A, DP, GUION, MAYOR, PC, CONCAT, DISYUN, KLEEN, PORCENT, S_MAS, S_UNA, LLAVE_C, STR;
+terminal NCONJ, LLAVE_A, DP, GUION, MAYOR, PC, CONCAT, DISYUN, KLEEN, PORCENT, S_MAS, S_UNA, LLAVE_C, STR, SIMB;
 
 terminal String LETMAY, LETMIN, VARIABLE, TILDE, DIG, COMA;
 
@@ -94,11 +94,11 @@ INICIO ::= BODY
             :};
 
 //CUERPO DE LA GRAMATICA
-BODY ::= LLAVE_A DEFCONJS DEFER LLAVE_C
+BODY ::= LLAVE_A DEFCONJS LLAVE_C
             {:
                 parser.defC.DefinicionDeConjuntos();
             :};
-//LLAVE_A DEFCONJS DEFER PORCENT PORCENT PORCENT PORCENT TESTER LLAVE_C;
+//LLAVE_A DEFCONJS DEFER PORCENT PORCENT PORCENT PORCENT TESTER LLAVE_C
 
 
 
@@ -109,14 +109,14 @@ DEFCONJS ::= DEFCONJS NCONJ DP VARIABLE:a GUION MAYOR NOTACION:b PC
            {: String c = b.toString(); parser.defC.add(a,c); :}
             ;
 
-NOTACION ::= NOTACIONCONV:n
-            {: RESULT = n; System.out.println(n.toString()); :}
-            |LETMIN:a TILDE:b LETMIN:c
+NOTACION ::= LETMIN:a TILDE:b LETMIN:c
             {: RESULT = a.toString()+b.toString()+c.toString(); :}
             | LETMAY:a TILDE:b LETMAY:c
             {: RESULT = a.toString()+b.toString()+c.toString(); :}
             | DIG:a TILDE:b DIG:c
             {: RESULT = a.toString()+b.toString()+c.toString(); :}
+            | NOTACIONCONV:n
+            {: RESULT = n; System.out.println(n.toString()); :}
             ;
 
 NOTACIONCONV ::= AUXCONV:a LETRA:c
@@ -185,6 +185,7 @@ DEFER ::= DEFER VARIABLE:nombre GUION MAYOR ER:valor PC
             Map<String, List<String[]>> transitions = TT.modificacionTransiciones();
             HashMap<String, List<String>> conjunts = parser.defC.DefinicionDeConjuntos();
             AFD objAFD = new AFD(nombre, "S0", statusA, transitions);
+            objAFD.graphvizAFD();
             objAFD.setConjuntos(conjunts);
             dbAFD.InsertAFD(objAFD);
             //-------------------------------------------------->
@@ -237,6 +238,7 @@ DEFER ::= DEFER VARIABLE:nombre GUION MAYOR ER:valor PC
             Map<String, List<String[]>> transitions = TT.modificacionTransiciones();
             HashMap<String, List<String>> conjunts = parser.defC.DefinicionDeConjuntos();
             AFD objAFD = new AFD(nombre, "S0", statusA, transitions);
+            objAFD.graphvizAFD();
             objAFD.setConjuntos(conjunts);
             dbAFD.InsertAFD(objAFD);
             //-------------------------------------------------->
@@ -329,10 +331,6 @@ T ::= SU:a ER:b
                 parser.cont++;
 
                 // TABLA DE SIGUIENTES
-                /*System.out.println("-----Siguientes "+valor+">  \n"+ "Asignaran a: ");
-                System.out.println(indER.getHizq().getPrimero());
-                System.out.println("los valores:");
-                System.out.println(indER.getHizq().getUltimo());*/
                 parser.objSig.addElementH(indER.getHizq().getPrimero(), indER.getHizq().getUltimo());
 
                 RESULT = indER;
@@ -375,7 +373,15 @@ SD ::= CONCAT:c
      {: RESULT = d.toString(); :}
      ;
 
-TE ::= STR:s
+TE ::= SIMB:i
+    {:
+        // METODO DEL ARBOL
+        System.out.println("SIMBOLOS ESPECIALES---> "+i.toString());
+        cadenaERnombre += i.toString() + ",";
+        RESULT = i.toString(); 
+        
+    :}
+     | STR:s
      {:
         // METODO DEL ARBOL
         String cadena = s.toString(); //"hola"
@@ -396,9 +402,21 @@ TE ::= STR:s
 
 
 //bloque [TEST DE LAS EXPRESIONES REGULARES EN POLACO]
-/*TESTER ::= TESTER VARIABLE DP STR PC
-         | VARIABLE DP STR PC
-         ;*/
+TESTER ::= TESTER VARIABLE:a DP STR:s PC
+            {:
+                String cadena = s.toString();
+                String Fcadena = cadena.substring(1,cadena.length()-1);
+                dbAFD.validarCadena(Fcadena, a.toString());
+                System.out.println("ESTO SE EVALUARA--------------------->\nAutomata: "+a.toString()+"\ncadena: "+Fcadena);
+            :}
+         | VARIABLE:v DP STR:t PC
+            {:
+                String cadenas = t.toString();
+                String Fcadenas = cadenas.substring(1,cadenas.length()-1);
+                dbAFD.validarCadena(Fcadenas, v.toString());
+                System.out.println("ESTO SE EVALUARA--------------------->\nAutomata: "+v.toString()+"\ncadena: "+Fcadenas);
+            :}
+         ;
 
 
 

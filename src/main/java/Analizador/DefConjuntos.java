@@ -61,20 +61,20 @@ public class DefConjuntos {
         System.out.println("\n--------------------------CONJUNTOS CARGADOS--------------------------\n"+conjFinal);
         return conjFinal;
     }
-    
-    
+    // ( |\!|\"|\#|\$|\%|\&|\'|\(|\)|\)|\*|\+|\,|\-|\.|\/|\:|\;|\<|\=|\>|\?|\@|\[|\\|\]|\^|\_|\`|\{|\||\})
+    //   CONJ: pepe -> \~|;
     
     private List<String> asignacionConjuntos_rango(String E_inicio, String E_final){
         String abcMinus = "a,b,c,d,e,f,g,h,i,j,k,l,m,n,ñ,o,p,q,r,s,t,u,v,w,x,y,z";
         String abcMayus = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,Ñ,O,P,Q,R,S,T,U,V,W,X,Y,Z"; 
-        String numeros = "0,1,2,3,4,5,6,7,8,9";
-        String simbolos = "!,\",#,$,%,&";
+        String numeros = "0,1,2,3,4,5,6,7,8,9";// --->  " ' \  ---> \" \' \\
+        String simbolos = " 1!1\"1#1$1%1&1'1(1)1*1+1,1-1.1/1:1;1<1=1>1?1@1[1\\1]1^1_1`1{1|1}";
         
         // SE DECLARAN LA LISTA DE LETRAS Y NUMEROS
         List<String> lista_abc = Arrays.asList(abcMinus.split(","));
         List<String> lista_ABC = Arrays.asList(abcMayus.split(","));
         List<String> lista_dig = Arrays.asList(numeros.split(","));
-        List<String> lista_sim = Arrays.asList(simbolos.split(","));
+        List<String> lista_sim = Arrays.asList(simbolos.split("1"));
                 
         // ESTA ES LA LISTA FINAL CON EL RANGO OBTENIDO
         List<String> nuevo = new ArrayList<String>();
@@ -131,6 +131,7 @@ public class DefConjuntos {
                 }
             }
         }
+        
         
         return nuevo;
         
