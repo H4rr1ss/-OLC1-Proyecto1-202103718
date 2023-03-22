@@ -22,13 +22,14 @@ public class Pautomatas extends javax.swing.JPanel {
     }
     
     public void asignarImageAutomata(String nombreImage){
-        System.out.println("hoal xd");
-        ImageIcon image = new ImageIcon(getClass().getResource("/TRANSICIONES_202103718/"+nombreImage+".jpg"));
-        Icon icon = new ImageIcon(image.getImage().getScaledInstance(780, 640, 0));
         
-        //Icon image = new ImageIcon(new ImageIcon(getClass().getResource("/AFD_202103718/frase.jpg")).getImage().getScaledInstance(780, 640, 0));
-        lbl_imageN.setIcon(icon);
-        System.out.println("pep");
+        ImageIcon imagen = new ImageIcon("src/main/java/AFD_202103718/"+nombreImage+".jpg");
+        int ancho = imagen.getIconWidth();
+        
+        
+        Icon miIcono = new ImageIcon(imagen.getImage().getScaledInstance(ancho, 358, Image.SCALE_DEFAULT));
+        lbl_imageN.setIcon(miIcono);
+        this.repaint();
     }
 
     /**
@@ -40,12 +41,14 @@ public class Pautomatas extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
         bg = new javax.swing.JPanel();
         lbl_imageN = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         bg.setBackground(new java.awt.Color(255, 153, 153));
+        bg.setPreferredSize(new java.awt.Dimension(2500, 900));
 
         lbl_imageN.setForeground(new java.awt.Color(0, 0, 0));
 
@@ -54,22 +57,26 @@ public class Pautomatas extends javax.swing.JPanel {
         bgLayout.setHorizontalGroup(
             bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bgLayout.createSequentialGroup()
-                .addComponent(lbl_imageN, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 442, Short.MAX_VALUE))
+                .addComponent(lbl_imageN, javax.swing.GroupLayout.PREFERRED_SIZE, 2500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         bgLayout.setVerticalGroup(
             bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bgLayout.createSequentialGroup()
-                .addComponent(lbl_imageN, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 417, Short.MAX_VALUE))
+                .addComponent(lbl_imageN, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 542, Short.MAX_VALUE))
         );
 
-        add(bg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 790, 650));
+        jScrollPane1.setViewportView(bg);
+
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1155, 680));
+        jScrollPane1.getAccessibleContext().setAccessibleDescription("");
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel bg;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbl_imageN;
     // End of variables declaration//GEN-END:variables
 }

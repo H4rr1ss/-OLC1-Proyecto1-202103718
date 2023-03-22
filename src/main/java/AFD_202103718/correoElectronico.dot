@@ -1,0 +1,43 @@
+digraph Patron{ 
+
+    rankdir = LR
+    layout = dot
+    node[shape = circle, width = 1, height = 1]; 
+    subgraph Cluster_A{ 
+    label = "Nombre:correoElectronico"   
+    fontcolor ="black" 
+    fontsize = 30 
+    bgcolor ="#F1DFB2" 
+	nodeS3[label = "S3" fontcolor = "#000000" fontsize = 20 fillcolor = "#CFF7E7" style = filled]; 
+	nodeS4[label = "S4" fontcolor = "#000000" fontsize = 20 fillcolor = "#CFF7E7" style = filled]; 
+	nodeS5[label = "S5" fontcolor = "#000000" fontsize = 20 fillcolor = "#CFF7E7" style = filled]; 
+	nodeS6[label = "S6" fontcolor = "#000000" fontsize = 20 fillcolor = "#CFF7E7" style = filled]; 
+	nodeS7[label = "S7" fontcolor = "#000000" fontsize = 20 fillcolor = "#CFF7E7" style = filled]; 
+    nodeS8[label = "S8" fontcolor = "#000000" fontsize = 20 fillcolor = "#D0F3E6" style = filled shape = doublecircle]; 
+    nodeS0[label = "S0
+(inicio)" fontcolor = "#000000" fontsize = 20 fillcolor = "#CFF7E7" style = filled shape = cds]; 
+	nodeS1[label = "S1" fontcolor = "#000000" fontsize = 20 fillcolor = "#CFF7E7" style = filled]; 
+	nodeS2[label = "S2" fontcolor = "#000000" fontsize = 20 fillcolor = "#CFF7E7" style = filled]; 
+    nodeS3->nodeS4[label = minuscula]
+    nodeS3->nodeS4[label = mayuscula]
+    nodeS4->nodeS4[label = minuscula]
+    nodeS4->nodeS4[label = mayuscula]
+    nodeS4->nodeS5[label = "\."]
+    nodeS5->nodeS6[label = c]
+    nodeS6->nodeS7[label = o]
+    nodeS7->nodeS8[label = m]
+    nodeS0->nodeS1[label = minuscula]
+    nodeS0->nodeS1[label = mayuscula]
+    nodeS1->nodeS2[label = simbolos]
+    nodeS1->nodeS2[label = minuscula]
+    nodeS1->nodeS2[label = mayuscula]
+    nodeS1->nodeS2[label = numero]
+    nodeS2->nodeS2[label = simbolos]
+    nodeS2->nodeS2[label = minuscula]
+    nodeS2->nodeS2[label = mayuscula]
+    nodeS2->nodeS2[label = numero]
+    nodeS2->nodeS3[label = "\@"]
+
+    } 
+
+}

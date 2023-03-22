@@ -8,16 +8,16 @@ package Analizador;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int LETMIN = 18;
-  public static final int LETMAY = 17;
+  public static final int LETMIN = 19;
+  public static final int LETMAY = 18;
   public static final int GUION = 5;
   public static final int S_MAS = 12;
   public static final int CONCAT = 8;
-  public static final int VARIABLE = 19;
+  public static final int VARIABLE = 20;
   public static final int PORCENT = 11;
-  public static final int TILDE = 20;
+  public static final int TILDE = 21;
   public static final int DP = 4;
-  public static final int COMA = 22;
+  public static final int COMA = 23;
   public static final int SIMB = 16;
   public static final int S_UNA = 13;
   public static final int MAYOR = 6;
@@ -30,7 +30,8 @@ public class sym {
   public static final int NCONJ = 2;
   public static final int LLAVE_A = 3;
   public static final int PC = 7;
-  public static final int DIG = 21;
+  public static final int CONJASCII = 17;
+  public static final int DIG = 22;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -49,6 +50,7 @@ public class sym {
   "LLAVE_C",
   "STR",
   "SIMB",
+  "CONJASCII",
   "LETMAY",
   "LETMIN",
   "VARIABLE",

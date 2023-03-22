@@ -7,6 +7,7 @@ import java.util.LinkedList;
 
 %{
     public static LinkedList<usoER> TablaErr = new LinkedList<usoER>();
+    String cadena="";
 %}
 
 %class Lexer
@@ -17,7 +18,12 @@ import java.util.LinkedList;
 %line
 %column
 %ignorecase
-%state PRUEBA
+
+
+
+CONJASCIII = (\!|\"|\#|\$|\%|\&|\'|\(|\)|\)|\*|\+|\,|\-|\.|\/|\:|\;|\<|\=|\>|\?|\@|\[|\\|\]|\^|\_|\`|\{|\||\})
+CONJASCII = {CONJASCIII}\~{CONJASCIII}|{CONJASCIII}(\,{CONJASCIII})+
+
 
 %init{
     yyline = 1;
@@ -47,9 +53,11 @@ import java.util.LinkedList;
 %%
 
 (\/\/[^\n\r]* | \<\![^\!\>]*\!\>) {/*Ignore*/}
+
 <YYINITIAL> [a-z] {return new Symbol( sym.LETMIN, yyline, yycolumn, yytext()); }
 <YYINITIAL> [A-Z] {return new Symbol( sym.LETMAY, yyline, yycolumn, yytext()); }
 <YYINITIAL> [0-9]+ {return new Symbol( sym.DIG, yyline, yycolumn, yytext()); }
+<YYINITIAL> {CONJASCII} {return new Symbol( sym.CONJASCII, yyline, yycolumn, yytext()); }
 <YYINITIAL> (\\"n"|\\\'|"\\""\"")  {return new Symbol( sym.SIMB, yyline, yycolumn, yytext()); }
 <YYINITIAL> \"([a-zA-Z_ ]|[0-9]|\\\"|[\| \# \$ \% \& \' \( \) \' \+ \, \- \. \/ \: \; \< \= \> \? \@ \[ \\ \] \^ \_ \{ \| \} \\])*\.?[0-9]*\" {return new Symbol( sym.STR, yyline, yycolumn, yytext()); }
 <YYINITIAL> "CONJ" {return new Symbol(sym.NCONJ, yyline, yycolumn, yytext()); }
@@ -68,21 +76,17 @@ import java.util.LinkedList;
 <YYINITIAL> "+" {return new Symbol(sym.S_MAS, yyline, yycolumn, yytext()); }
 <YYINITIAL> "?" {return new Symbol(sym.S_UNA, yyline, yycolumn, yytext()); }
 <YYINITIAL> "}" {return new Symbol(sym.LLAVE_C, yyline, yycolumn, yytext()); }
+
 <YYINITIAL> [\n\r\t ]+ {  }
 
-<YYINITIAL> "/@"     {yybegin(PRUEBA);
-                     System.out.println("Entraste a prueba estados");
-                    }
-<PRUEBA>    [a-z]   {System.out.println("letras");}
-<PRUEBA> [^"@/"]    {}
-<PRUEBA> "@/"       {yybegin(YYINITIAL);
-                    System.out.println("aca termino la prueba de estados");
-                    }
 
 
 
 
-[^]             {usoER t = new usoER(1, "Error Lexico", yytext(), yyline, yycolumn); 
+
+
+<YYINITIAL> [^]             {System.out.println("eesta entrando a los errores del sistema");
+                usoER t = new usoER(1, "Error Lexico", yytext(), yyline, yycolumn); 
                 System.out.println("ERRORR-------"+yytext()+"-------------");
                 TablaErr.add(t); 
                 
@@ -98,3 +102,5 @@ import java.util.LinkedList;
                 System.out.println("-1-1-1-1-1-");
                 t.TablaDeErrores(cadena);
                 }
+
+

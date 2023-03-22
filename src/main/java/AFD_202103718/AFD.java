@@ -1,4 +1,6 @@
 package AFD_202103718;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -58,15 +60,54 @@ public class AFD {
         this.transiciones = transiciones;
     }
     
-    private String recorrido(List<String[]> value, List<String> estadosA){
-        
-        for(String[] nodos: value){
-            if(estadosA.contains(nodos[1])){
-                return nodos[1];
+    
+    private void graficarF(String nombre, String graphviz){
+        FileWriter fichero = null;
+        PrintWriter pw = null;
+        try {
+            fichero = new FileWriter("src/main/java/AFD_202103718/" + nombre + ".dot");
+            pw = new PrintWriter(fichero);
+            pw.println(graphviz);
+
+        } catch (Exception e) {
+            System.out.println("error, no se realizo el archivo"+e);
+        } finally {
+            try {
+                if (null != fichero) {
+                    fichero.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
             }
         }
-        return "";
-    }
+        //para compilar el archivo dot y obtener la imagen
+        try {
+            //dirección doonde se ecnuentra el compilador de graphviz
+            String dotPath = "C:\\Program Files\\Graphviz\\bin\\dot.exe";
+            //dirección del archivo dot
+            String fileInputPath = "src/main/java/AFD_202103718/" + nombre + ".dot";
+            //dirección donde se creara la magen
+            String fileOutputPath = "src/main/java/AFD_202103718/" + nombre + ".jpg";
+            //tipo de conversón
+            String tParam = "-Tjpg";
+            String tOParam = "-o";
+
+            String[] cmd = new String[5];
+            cmd[0] = dotPath;
+            cmd[1] = tParam;
+            cmd[2] = fileInputPath;
+            cmd[3] = tOParam;
+            cmd[4] = fileOutputPath;
+
+            Runtime rt = Runtime.getRuntime();
+
+            rt.exec(cmd);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+        }
+    }    
     
     public void graphvizAFD(){
         String graphviz = "";//AGREGAR  COMA POR APARTE
@@ -88,13 +129,6 @@ public class AFD {
                 graphviz += "    node"+trans.getKey()+"[label = \""+ trans.getKey() +"\" fontcolor = \"#000000\" fontsize = 20 fillcolor = \"#D0F3E6\" style = filled shape = doublecircle]; \n";
                 continue;
             }
-            
-            /*String f = recorrido(trans.getValue(), getEstadosA());
-            
-            if(!f.equals("")){
-                graphviz += "    node"+f+"[label = \""+f+"\" fontcolor = \"#000000\" fontsize = 20 fillcolor = \"#D0F3E6\" style = filled shape = doublecircle]; \n";
-                continue;
-            }*/
                 
             contadorEstadoF++;
             graphviz += "\tnode"+trans.getKey()+"[label = \""+ trans.getKey() +"\" fontcolor = \"#000000\" fontsize = 20 fillcolor = \"#CFF7E7\" style = filled]; \n";
@@ -115,14 +149,17 @@ public class AFD {
                 }
                 
                 if(listaSimbolosEspeciales.contains(simbolo)){
+                    
                     if(simbolo.equals(" ")){
                         simbolo = "espacio";
                     }else if(simbolo.equals("\\\"")){
                         graphviz += "    node"+E_origen.getKey()+"->node"+E_destino+"[label = \"\\\\"+simbolo+"\"]\n";
                         continue;
                     }
+                    
                     graphviz += "    node"+E_origen.getKey()+"->node"+E_destino+"[label = \"\\"+simbolo+"\"]\n";
                     continue;
+                    
                 }else if(simbolo.equals(",")){
                     graphviz += "    node"+E_origen.getKey()+"->node"+E_destino+"[label = \""+simbolo+"\"]\n";
                     continue;
@@ -132,62 +169,9 @@ public class AFD {
             }
         }
 
-        graphviz += "\n    } \n\n}";
-        
-        
+        graphviz += "\n    } \n\n}";       
+        graficarF(getNombre(), graphviz);
         System.out.println("\n\n\n\n-----GRAPHVIZ-----\n");
         System.out.println(graphviz);
     }
 }
-
-/*
-
-String prim = IDS+"";
-            String ult = IDS+"";
-            String prime;
-            String ulti;
-            Nodo nuevofinal = new Nodo(null, null, "#", parser.cont, parser.IDS, "N", prim, ult);
-            parser.objSig.addElementH(nuevofinal.getPrimero(), "-");
-
-            parser.cont++;
-            if (valor.getAnulable().equals("A")){
-                prime = valor.getPrimero() + ult;
-            }else{
-                prime = valor.getPrimero();
-            }
-            ulti = nuevofinal.getUltimo();
-            Nodo nuevaraiz = new Nodo(valor, nuevofinal, ".", parser.cont, 0, "N", prime,ulti);
-            parser.Raiz = nuevaraiz;
-            graficarArbol(nuevaraiz, nombre);
-            IDS = 1;
-
-            //TABLA DE SIGUIENTES------------------------------>
-            parser.objSig.addElementH(nuevaraiz.getHizq().getUltimo(), nuevaraiz.getHder().getPrimero());
-            cadenaERnombre += "#,";
-            System.out.println("ABAJO: "+cadenaERnombre);
-            parser.objSig.Graphviz(cadenaERnombre, nombre);
-            //------------------------------------------------->
-
-            //TABLA DE TRANSICIONES---------------------------->
-            dbTablaTransicion TT = new dbTablaTransicion();
-            parser.objSig.asignacionTablaTransiciones(TT, cadenaERnombre);
-            TT.TablaTransiciones(nuevaraiz.getPrimero(), nombre);
-            //------------------------------------------------->
-
-            //CREACION OBJ AFD--------------------------------->
-            List<String> statusA =  TT.estadosDeAceptacion();
-            Map<String, List<String[]>> transitions = TT.modificacionTransiciones();
-            HashMap<String, List<String>> conjunts = parser.defC.DefinicionDeConjuntos();
-            AFD objAFD = new AFD(nombre, "S0", statusA, transitions);
-            objAFD.setConjuntos(conjunts);
-            dbAFD.InsertAFD(objAFD);
-            //-------------------------------------------------->
-            
-            //-----------------REINICIO DE VARIABLES-----------------
-            //SIGUIENTES
-            cadenaERnombre = "";
-            parser.objSig.limpiarMap();
-            //TRANSICIONES
-            TT.limipiarMap_t();
-
-*/

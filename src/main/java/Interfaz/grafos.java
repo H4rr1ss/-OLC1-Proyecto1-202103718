@@ -254,9 +254,9 @@ public class grafos extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.auxNombre.setText(nombreEntrada);
         Pautomatas p4 = new Pautomatas();
-        p4.setSize(780,640);
+        p4.setSize(1165,682);
         p4.setLocation(1,1);
-        //p4.asignarImageAutomata(nombreEntrada);
+        p4.asignarImageAutomata(nombreEntrada);
                 
         content.removeAll();
         content.add(p4, BorderLayout.CENTER);

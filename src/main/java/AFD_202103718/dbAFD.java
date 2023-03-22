@@ -40,41 +40,64 @@ public class dbAFD {
         return null;
     }
     
+    private static boolean verificarEstadoAceptConSimb(String simbolo, AFD afd, String estado){
+        for(String[] veri : afd.getTransiciones().get(estado)){
+            String simb = veri[0];
+            String sigu = veri[1];
+            
+            if(simb.equals(simbolo) && afd.getEstadosA().contains(sigu)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    
+    private static boolean veriUltimoEstado (String simbolo, AFD afd, String estado, String sig){
+        
+        boolean confirmar = true;
+        
+        if(!verificarEstadoAceptConSimb(simbolo, afd, estado)){
+           return false;
+        }
+         
+        if(afd.getEstadosA().contains(sig)){
+            confirmar = false;
+        }
+        
+        return confirmar;
+    }
+    
     public static void validarCadena(String cadena, String nombreBusqueda){
         boolean caracterE = false;
         
         for(AFD afd: afds){
         
-            if(!afd.getNombre().equals(nombreBusqueda)){
-                continue;
-            }
-            
+            if(!afd.getNombre().equals(nombreBusqueda)){ continue; }
             String estado = afd.getEstadoI();
+            int recorridoCadena = 0;
             
             for(char caracter: cadena.toCharArray()){
                 String caracterSTR = "";
+                recorridoCadena++;
                 
-                if(caracter == '\\'){
-                    caracterE = true;
-                    continue;
-                }
-
+                if(caracter == '\\'){ caracterE = true; continue;}
                 boolean encontrado = false;
 
                 for(String[] mapa : afd.getTransiciones().get(estado)){
                     String alfabeto = mapa[0];
                     String sig = mapa[1];
-
+                    
                     if(caracterE){
                         String caracterString = "\\"+String.valueOf(caracter);// ---->  \" \' \n
                         caracterSTR = caracterString;
-                    }else{
-                        caracterSTR = String.valueOf(caracter);
-                    }
+                        
+                    }else{caracterSTR = String.valueOf(caracter);}
+                    
+                    if(cadena.length() == recorridoCadena && veriUltimoEstado(alfabeto, afd, estado, sig)){ continue; }
                     
                     if(!caracterSTR.equals(alfabeto)){
                         
-                        // VERIFICARA SI EXISTE EN ALGUN CONJUNTO DEL HASH
                         boolean llaveExistente = afd.getConjuntos().containsKey(alfabeto);
 
                         if(llaveExistente){
@@ -95,24 +118,23 @@ public class dbAFD {
                     break;
                 }
                 
-                if(caracterE){
-                    caracterE = false;
-                }
+                if(caracterE){ caracterE = false; }
 
                 if (!encontrado){
-                    salidaDeConsola = "Caracter invalido <"+caracter+">, no se puede hacer una transicion.";
+                    salidaDeConsola = "\nCaracter invalido <"+caracter+">, no se puede hacer una transicion.";
                     System.out.println("Caracter invalido <"+caracter+">, no se puede hacer una transicion.");
                     break;
                 }
             }
 
-            if(!afd.getEstadosA().contains(estado)){
-                salidaDeConsola = "Cadena invalida, no termina en el estado de aceptacion";
-                System.out.println("cadena invalida, no termina en el estado de aceptacion");
-            }else{
-                salidaDeConsola = "La expresion: \""+cadena+"\", es valida con la expresion regular "+nombreBusqueda+".";
-                System.out.println("cadena valida");
+            if(salidaDeConsola.equals("")){
+                if(!afd.getEstadosA().contains(estado)){
+                    salidaDeConsola = "\nCadena \""+ cadena+"\" invalida, no termina en el estado de aceptacion";
+                    System.out.println("cadena invalida, no termina en el estado de aceptacion");
+                    
+                }else{ salidaDeConsola = "\nLa expresion: \""+cadena+"\", es valida con la expresion regular "+nombreBusqueda+"."; }
             }
+            
         
         }
         listaRespuestaConsola.add(salidaDeConsola);
@@ -121,6 +143,10 @@ public class dbAFD {
     
     public static List<String> muestraEnConsola(){
         return listaRespuestaConsola;
+    }
+    
+    public static void cleanList(){
+        listaRespuestaConsola.clear();
     }
     
 }

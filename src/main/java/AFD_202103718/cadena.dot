@@ -1,0 +1,31 @@
+digraph Patron{ 
+
+    rankdir = LR
+    layout = dot
+    node[shape = circle, width = 1, height = 1]; 
+    subgraph Cluster_A{ 
+    label = "Nombre:cadena"   
+    fontcolor ="black" 
+    fontsize = 30 
+    bgcolor ="#F1DFB2" 
+    nodeS3[label = "S3" fontcolor = "#000000" fontsize = 20 fillcolor = "#D0F3E6" style = filled shape = doublecircle]; 
+    nodeS0[label = "S0
+(inicio)" fontcolor = "#000000" fontsize = 20 fillcolor = "#CFF7E7" style = filled shape = cds]; 
+	nodeS1[label = "S1" fontcolor = "#000000" fontsize = 20 fillcolor = "#CFF7E7" style = filled]; 
+	nodeS2[label = "S2" fontcolor = "#000000" fontsize = 20 fillcolor = "#CFF7E7" style = filled]; 
+    nodeS0->nodeS1[label = "\\'"]
+    nodeS1->nodeS2[label = "\\n"]
+    nodeS1->nodeS2[label = minus]
+    nodeS1->nodeS2[label = mayus]
+    nodeS1->nodeS2[label = digito]
+    nodeS1->nodeS2[label = "\espacio"]
+    nodeS2->nodeS2[label = "\\n"]
+    nodeS2->nodeS2[label = minus]
+    nodeS2->nodeS2[label = mayus]
+    nodeS2->nodeS2[label = digito]
+    nodeS2->nodeS2[label = "\espacio"]
+    nodeS2->nodeS3[label = "\\'"]
+
+    } 
+
+}

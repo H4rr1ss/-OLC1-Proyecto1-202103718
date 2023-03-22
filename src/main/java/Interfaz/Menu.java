@@ -76,14 +76,22 @@ public class Menu extends javax.swing.JFrame {
 
         nombreArchivo.setText("Archivo...");
 
+        jScrollPane1.setBackground(new java.awt.Color(51, 51, 51));
         jScrollPane1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jScrollPane1.setViewportBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jScrollPane1.setHorizontalScrollBar(null);
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(900, 93));
 
+        jt_consola.setBackground(new java.awt.Color(51, 51, 51));
         jt_consola.setColumns(20);
+        jt_consola.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
+        jt_consola.setForeground(new java.awt.Color(153, 153, 153));
         jt_consola.setRows(5);
-        jt_consola.setText("LA EXPRESION: ESTA CORRECTA");
+        jt_consola.setDisabledTextColor(new java.awt.Color(204, 204, 0));
         jt_consola.setEnabled(false);
+        jt_consola.setPreferredSize(new java.awt.Dimension(910, 200));
         jScrollPane1.setViewportView(jt_consola);
+        jt_consola.getAccessibleContext().setAccessibleParent(jScrollPane1);
 
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Consola");
@@ -252,11 +260,11 @@ public class Menu extends javax.swing.JFrame {
                 .addGap(381, 381, 381))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel2)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 670, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txt_archivo, javax.swing.GroupLayout.PREFERRED_SIZE, 666, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(txt_archivo, javax.swing.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE))
+                .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(eleccion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(botones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -279,8 +287,8 @@ public class Menu extends javax.swing.JFrame {
                         .addGap(19, 19, 19)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(21, Short.MAX_VALUE))))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
 
         pack();
@@ -323,7 +331,14 @@ public class Menu extends javax.swing.JFrame {
             parse = new Analizador.parser(new Analizador.Lexer(new StringReader(textoNuevo)));
             
             parse.parse();
-          
+            String muestra = "";
+            int i = 1;
+            
+            for(String muestraC: dbAFD.muestraEnConsola()){
+                muestra += muestraC;
+            }
+            jt_consola.setText(muestra);
+            dbAFD.cleanList();          
         }
         catch(Exception ex){
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
@@ -401,7 +416,6 @@ public class Menu extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(jListaAFD.getSelectedIndex()>-1){
             String salida = jListaAFD.getSelectedItem().toString();
-            jt_consola.setText(salida);
 
             grafos ventanasec = new grafos();
             this.setVisible(false);

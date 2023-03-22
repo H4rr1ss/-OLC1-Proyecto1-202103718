@@ -1,0 +1,87 @@
+digraph H {
+
+	parent [
+		shape=plaintext
+		label=<
+			<table border='1' cellborder='1'>
+				<tr>
+					<td bgcolor = "#EC8E5C" colspan = "4">HOJA</td>
+					<td bgcolor = "#EC8E5C" colspan = "12">Siguientes Posiciones </td>
+				</tr>
+
+				<tr>
+					<td bgcolor = "#EC8E5C" colspan = "3">h</td>
+					<td bgcolor = "#EC8E5C" >1</td>
+					<td colspan = "12">[2]</td>
+				</tr>
+
+				<tr>
+					<td bgcolor = "#EC8E5C" colspan = "3">t</td>
+					<td bgcolor = "#EC8E5C" >2</td>
+					<td colspan = "12">[3]</td>
+				</tr>
+
+				<tr>
+					<td bgcolor = "#EC8E5C" colspan = "3">t</td>
+					<td bgcolor = "#EC8E5C" >3</td>
+					<td colspan = "12">[4]</td>
+				</tr>
+
+				<tr>
+					<td bgcolor = "#EC8E5C" colspan = "3">p</td>
+					<td bgcolor = "#EC8E5C" >4</td>
+					<td colspan = "12">[5, 6]</td>
+				</tr>
+
+				<tr>
+					<td bgcolor = "#EC8E5C" colspan = "3">s</td>
+					<td bgcolor = "#EC8E5C" >5</td>
+					<td colspan = "12">[6]</td>
+				</tr>
+
+				<tr>
+					<td bgcolor = "#EC8E5C" colspan = "3">:</td>
+					<td bgcolor = "#EC8E5C" >6</td>
+					<td colspan = "12">[7]</td>
+				</tr>
+
+				<tr>
+					<td bgcolor = "#EC8E5C" colspan = "3">/</td>
+					<td bgcolor = "#EC8E5C" >7</td>
+					<td colspan = "12">[8]</td>
+				</tr>
+
+				<tr>
+					<td bgcolor = "#EC8E5C" colspan = "3">/</td>
+					<td bgcolor = "#EC8E5C" >8</td>
+					<td colspan = "12">[9]</td>
+				</tr>
+
+				<tr>
+					<td bgcolor = "#EC8E5C" colspan = "3">minuscula</td>
+					<td bgcolor = "#EC8E5C" >9</td>
+					<td colspan = "12">[9, 10]</td>
+				</tr>
+
+				<tr>
+					<td bgcolor = "#EC8E5C" colspan = "3">.</td>
+					<td bgcolor = "#EC8E5C" >10</td>
+					<td colspan = "12">[11]</td>
+				</tr>
+
+				<tr>
+					<td bgcolor = "#EC8E5C" colspan = "3">minuscula</td>
+					<td bgcolor = "#EC8E5C" >11</td>
+					<td colspan = "12">[11, 12]</td>
+				</tr>
+
+				<tr>
+					<td bgcolor = "#EC8E5C" colspan = "3">#</td>
+					<td bgcolor = "#EC8E5C" >12</td>
+					<td colspan = "12">[-]</td>
+				</tr>
+
+			</table>
+	>];
+
+}
