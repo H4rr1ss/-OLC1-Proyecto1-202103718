@@ -10,7 +10,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import AFD_202103718.dbAFD;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.List;
 import java.util.logging.Level;
@@ -58,6 +60,7 @@ public class Menu extends javax.swing.JFrame {
         eleccion = new javax.swing.JPanel();
         btn_cargaAFD = new javax.swing.JButton();
         jListaAFD = new javax.swing.JComboBox<>();
+        lbl_errores = new javax.swing.JLabel();
         BarraMenu = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -109,7 +112,7 @@ public class Menu extends javax.swing.JFrame {
         });
 
         btn_generarAutomata.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        btn_generarAutomata.setLabel("Generar automata");
+        btn_generarAutomata.setLabel("Archivo de salida");
         btn_generarAutomata.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_generarAutomataActionPerformed(evt);
@@ -261,7 +264,10 @@ public class Menu extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel2)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(173, 173, 173)
+                        .addComponent(lbl_errores, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(txt_archivo, javax.swing.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE))
                 .addGap(22, 22, 22)
@@ -285,7 +291,9 @@ public class Menu extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(txt_archivo, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(19, 19, 19)
-                        .addComponent(jLabel2)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(lbl_errores, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
                         .addContainerGap())))
@@ -298,6 +306,8 @@ public class Menu extends javax.swing.JFrame {
         //Nuevo Archivo
         txt_archivo.setText("");
         nombreArchivo.setText("Archivo...");
+        
+        
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
@@ -316,10 +326,8 @@ public class Menu extends javax.swing.JFrame {
 
     
     private void btn_generarAutomataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_generarAutomataActionPerformed
-        // TODO add your handling code here:
-        //ESTO NO SERA DEFINITIVO LO QUE SE MUESTRA EN LA CONSOLA
-        //String data = dbAFD.returnDatosInterfaz();
-        //jt_consola.setText(data);
+        dbAFD.jsonSalida(nameARC);
+        dbAFD.cleanReporteJson();
     }//GEN-LAST:event_btn_generarAutomataActionPerformed
 
     private void btn_analizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_analizarActionPerformed
@@ -345,7 +353,9 @@ public class Menu extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_btn_analizarActionPerformed
-
+    
+    private static String nameARC = "";
+    
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         //ABRIR ARCHIVO
         JFileChooser fc = new JFileChooser();
@@ -358,7 +368,7 @@ public class Menu extends javax.swing.JFrame {
         
         if(seleccion == FileChooser.APPROVE_OPTION){
             File fichero = fc.getSelectedFile();
-            
+            nameARC = fichero.getName();
             this.nombreArchivo.setText(fichero.getAbsolutePath());
 
             try(FileReader fr = new FileReader(fichero)){
@@ -381,23 +391,54 @@ public class Menu extends javax.swing.JFrame {
         //GUARDAR COMO
         JFileChooser fc = new JFileChooser();
         
+        
         int seleccion = fc.showSaveDialog(this);
         
         if(seleccion == JFileChooser.APPROVE_OPTION){
             File fichero = fc.getSelectedFile();
             
-            try(FileWriter fw = new FileWriter(fichero)){
+            try(FileWriter fw = new FileWriter(fichero+".olc")){
                 fw.write(this.txt_archivo.getText());
+                
                 JOptionPane.showMessageDialog(null, "Archivo guardado correctamente!");
             } catch(IOException el){
                 el.printStackTrace();
             }
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
-
+    
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // GUARDAR
+        
+        if(nombreArchivo.getText().equals("Archivo...")){
+            JFileChooser fc = new JFileChooser();
+        
+            int seleccion = fc.showSaveDialog(this);
+
+            if(seleccion == JFileChooser.APPROVE_OPTION){
+                File fichero = fc.getSelectedFile();
+
+                try(FileWriter fw = new FileWriter(fichero+".olc")){
+                    fw.write(this.txt_archivo.getText());
+                    JOptionPane.showMessageDialog(null, "Archivo guardado correctamente!");
+                } catch(IOException el){
+                    el.printStackTrace();
+                }
+        }
+        }else{
+            File archivo = new File(nombreArchivo.getText());
        
+            try{
+               PrintWriter salida = new PrintWriter(archivo);
+               salida.println(txt_archivo.getText());
+               salida.close();
+
+            }catch (FileNotFoundException ex){
+               ex.printStackTrace(System.out);
+            }
+        
+        }
+        
     }//GEN-LAST:event_jMenuItem4ActionPerformed
     private void btn_cargaAFDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cargaAFDActionPerformed
 
@@ -463,6 +504,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jt_consola;
+    private javax.swing.JLabel lbl_errores;
     private javax.swing.JLabel nombreArchivo;
     private java.awt.TextArea txt_archivo;
     // End of variables declaration//GEN-END:variables

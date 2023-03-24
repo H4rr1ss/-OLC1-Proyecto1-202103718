@@ -213,9 +213,9 @@ public class dbTablaTransicion {
                 }
                 
                 String[] S0 = nodos.split(",");
-
+                listadoF.get(i).getEstadoF();
                 if(S0.length == 1 && S0[0].equals("") && numeral == 1){
-                    String EstadoI = finalEstado();
+                    String EstadoI = listadoF.get(i).getEstadoF();
                     transicion objTransiciones = new transicion(EstadoI, "", null, "", true);
                     objTransiciones.setSigEvaluar(nodo);
                     this.listadoF.add(objTransiciones); 
@@ -263,8 +263,8 @@ public class dbTablaTransicion {
                 List<String> listaF = new ArrayList<String>();
                 
                 for(Map.Entry<String, elementHash> mapAux : hashEvaluar.entrySet()){
-
-                    if(mapaBase.getKey().equals(mapAux.getKey())){      
+                    //if(mapaBase.getValue().getSimbolo().equals(mapAux.getValue().getSimbolo())){
+                    if(mapaBase.getValue().getSimbolo().equals(mapAux.getValue().getSimbolo())){      
                         nodoEvaluar = true;
                         ListaSig = nuevaListaNodos(listaF, mapAux.getValue().getSiguientes());// ALMACENA LOS NUEVOS SIGPOS
                         NodosYaUtilizados_tablaAzul += mapAux.getKey()+",";
@@ -300,37 +300,8 @@ public class dbTablaTransicion {
             }
         }
     }
-    
-    private String finalEstado(){
-        String estado = "";
-        int tamaño = this.listadoF.size()-1;
-        for(int i = 0; i < this.listadoF.size(); i++){
-            
-            if(i != tamaño){
-                continue;
-            }
-           
-            estado = this.listadoF.get(i).getEstadoF();
-        }
+
         
-        return estado;
-    }
-        
- 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     

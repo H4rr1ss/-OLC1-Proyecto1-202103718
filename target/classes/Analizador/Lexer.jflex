@@ -17,7 +17,7 @@ import java.util.LinkedList;
 %line
 %column
 %ignorecase
-
+%state PRUEBA
 
 %init{
     yyline = 1;
@@ -25,7 +25,8 @@ import java.util.LinkedList;
 %init}
 
 %eof{
-    System.out.println("ACA TERMINO EL ANALISIS LEXICO\n--------------------");
+    System.out.println("--------------------------->");
+    System.out.println("ACA TERMINO EL ANALISIS LEXICO");
     
     
  
@@ -39,34 +40,47 @@ import java.util.LinkedList;
     }else{
         TablaErr.clear();
     }
+    System.out.println("--------------------------->");
 
 %eof}
 
 %%
 
 (\/\/[^\n\r]* | \<\![^\!\>]*\!\>) {/*Ignore*/}
-[a-z] {return new Symbol( sym.LETMIN, yyline, yycolumn, yytext()); }
-[A-Z] {return new Symbol( sym.LETMAY, yyline, yycolumn, yytext()); }
-[0-9]+ {return new Symbol( sym.DIG, yyline, yycolumn, yytext()); }
-\"([a-zA-Z_ ]|[0-9]|[\| \# \$ \% \& \' \( \) \' \+ \, \- \. \/ \: \; \< \= \> \? \@ \[ \\ \] \^ \_ \{ \| \} \\])*\.?[0-9]*\" {return new Symbol( sym.STR, yyline, yycolumn, yytext()); }
-"CONJ" {return new Symbol(sym.NCONJ, yyline, yycolumn, yytext()); }
-[a-zA-Z][a-zA-Z_|0-9]* {return new Symbol( sym.VARIABLE, yyline, yycolumn, yytext()); }
-"{" {return new Symbol(sym.LLAVE_A, yyline, yycolumn, yytext()); }
-"," {return new Symbol(sym.COMA, yyline, yycolumn, yytext()); }
-":" {return new Symbol(sym.DP, yyline, yycolumn, yytext()); }
-"-" {return new Symbol(sym.GUION, yyline, yycolumn, yytext()); }
-">" {return new Symbol(sym.MAYOR, yyline, yycolumn, yytext()); }
-";" {return new Symbol(sym.PC, yyline, yycolumn, yytext()); }
-"~" {return new Symbol(sym.TILDE, yyline, yycolumn, yytext()); }
-"." {return new Symbol(sym.CONCAT, yyline, yycolumn, yytext()); }
-"|" {return new Symbol(sym.DISYUN, yyline, yycolumn, yytext()); }
-"*" {return new Symbol(sym.KLEEN, yyline, yycolumn, yytext()); }
-"%" {return new Symbol( sym.PORCENT, yyline, yycolumn, yytext()); }
-"+" {return new Symbol(sym.S_MAS, yyline, yycolumn, yytext()); }
-"?" {return new Symbol(sym.S_UNA, yyline, yycolumn, yytext()); }
-"}" {return new Symbol(sym.LLAVE_C, yyline, yycolumn, yytext()); }
+<YYINITIAL> [a-z] {return new Symbol( sym.LETMIN, yyline, yycolumn, yytext()); }
+<YYINITIAL> [A-Z] {return new Symbol( sym.LETMAY, yyline, yycolumn, yytext()); }
+<YYINITIAL> [0-9]+ {return new Symbol( sym.DIG, yyline, yycolumn, yytext()); }
+<YYINITIAL> (\\"n"|\\\'|"\\""\"")  {return new Symbol( sym.SIMB, yyline, yycolumn, yytext()); }
+<YYINITIAL> \"([a-zA-Z_ ]|[0-9]|[\| \# \$ \% \& \' \( \) \' \+ \, \- \. \/ \: \; \< \= \> \? \@ \[ \\ \] \^ \_ \{ \| \} \\])*\.?[0-9]*\" {return new Symbol( sym.STR, yyline, yycolumn, yytext()); }
+<YYINITIAL> "CONJ" {return new Symbol(sym.NCONJ, yyline, yycolumn, yytext()); }
+<YYINITIAL> [a-zA-Z][a-zA-Z_|0-9]* {return new Symbol( sym.VARIABLE, yyline, yycolumn, yytext()); }
+<YYINITIAL> "{" {return new Symbol(sym.LLAVE_A, yyline, yycolumn, yytext()); }
+<YYINITIAL> "," {return new Symbol(sym.COMA, yyline, yycolumn, yytext()); }
+<YYINITIAL> ":" {return new Symbol(sym.DP, yyline, yycolumn, yytext()); }
+<YYINITIAL> "-" {return new Symbol(sym.GUION, yyline, yycolumn, yytext()); }
+<YYINITIAL> ">" {return new Symbol(sym.MAYOR, yyline, yycolumn, yytext()); }
+<YYINITIAL> ";" {return new Symbol(sym.PC, yyline, yycolumn, yytext()); }
+<YYINITIAL> "~" {return new Symbol(sym.TILDE, yyline, yycolumn, yytext()); }
+<YYINITIAL> "." {return new Symbol(sym.CONCAT, yyline, yycolumn, yytext()); }
+<YYINITIAL> "|" {return new Symbol(sym.DISYUN, yyline, yycolumn, yytext()); }
+<YYINITIAL> "*" {return new Symbol(sym.KLEEN, yyline, yycolumn, yytext()); }
+<YYINITIAL> "%" {return new Symbol( sym.PORCENT, yyline, yycolumn, yytext()); }
+<YYINITIAL> "+" {return new Symbol(sym.S_MAS, yyline, yycolumn, yytext()); }
+<YYINITIAL> "?" {return new Symbol(sym.S_UNA, yyline, yycolumn, yytext()); }
+<YYINITIAL> "}" {return new Symbol(sym.LLAVE_C, yyline, yycolumn, yytext()); }
+<YYINITIAL> [\n\r\t ]+ {  }
 
-[\n\r\t ]+ {  }
+<YYINITIAL> "/@"     {yybegin(PRUEBA);
+                     System.out.println("Entraste a prueba estados");
+                    }
+<PRUEBA>    [a-z]   {System.out.println("letras");}
+<PRUEBA> [^"@/"]    {}
+<PRUEBA> "@/"       {yybegin(YYINITIAL);
+                    System.out.println("aca termino la prueba de estados");
+                    }
+
+
+
 
 [^]             {usoER t = new usoER(1, "Error Lexico", yytext(), yyline, yycolumn); 
                 System.out.println("ERRORR-------"+yytext()+"-------------");
@@ -84,11 +98,3 @@ import java.util.LinkedList;
                 System.out.println("-1-1-1-1-1-");
                 t.TablaDeErrores(cadena);
                 }
-
-
-
-
-
-
-
-

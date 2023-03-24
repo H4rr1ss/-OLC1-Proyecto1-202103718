@@ -115,7 +115,11 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="173" max="-2" attributes="0"/>
+                      <Component id="lbl_errores" min="-2" pref="223" max="-2" attributes="0"/>
+                  </Group>
                   <Component id="txt_archivo" pref="666" max="32767" attributes="0"/>
                   <Component id="jScrollPane1" alignment="0" pref="666" max="32767" attributes="0"/>
               </Group>
@@ -144,7 +148,10 @@
                   <Group type="102" attributes="0">
                       <Component id="txt_archivo" min="-2" pref="338" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
-                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                          <Component id="lbl_errores" min="-2" pref="20" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jScrollPane1" pref="105" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -286,7 +293,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Arial" size="12" style="1"/>
             </Property>
-            <Property name="label" type="java.lang.String" value="Generar automata"/>
+            <Property name="label" type="java.lang.String" value="Archivo de salida"/>
           </Properties>
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="generarAutomata"/>
@@ -389,5 +396,7 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JLabel" name="lbl_errores">
+    </Component>
   </SubComponents>
 </Form>

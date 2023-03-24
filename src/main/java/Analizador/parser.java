@@ -645,6 +645,7 @@ class CUP$parser$actions {
             objAFD.graphvizAFD();
             objAFD.setConjuntos(conjunts);
             dbAFD.InsertAFD(objAFD);
+            objAFD.graficarAFND(nuevaraiz);
             //-------------------------------------------------->
             
             //-----------------REINICIO DE VARIABLES-----------------

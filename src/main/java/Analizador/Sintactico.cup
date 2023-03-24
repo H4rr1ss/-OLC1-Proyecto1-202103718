@@ -243,6 +243,7 @@ DEFER ::= DEFER VARIABLE:nombre GUION MAYOR ER:valor PC
             objAFD.graphvizAFD();
             objAFD.setConjuntos(conjunts);
             dbAFD.InsertAFD(objAFD);
+            objAFD.graficarAFND(nuevaraiz);
             //-------------------------------------------------->
             
             //-----------------REINICIO DE VARIABLES-----------------

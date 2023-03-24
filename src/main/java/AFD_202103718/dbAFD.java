@@ -1,18 +1,28 @@
 package AFD_202103718;
 import AFD_202103718.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class dbAFD {
     //LISTA QUE ALMACENARA TODOS LOS AFD DURANTE LA EJECUCION
-    public static List<AFD> afds = new ArrayList<AFD>();
-    public static List<String> listaRespuestaConsola = new ArrayList<String>();
-    public static String salidaDeConsola = "";
+    private static List<AFD> afds = new ArrayList<AFD>();
+    private static List<String> listaRespuestaConsola = new ArrayList<String>();
+    private static List<String> ListaJsonSalida = new ArrayList<String>();
+    private static String salidaDeConsola = "";
     
     
     public static void InsertAFD(AFD data){
         afds.add(data);
+    }
+    
+    public static void cleanReporteJson(){
+        ListaJsonSalida.clear();
     }
     
     public static void returnAFD(){
@@ -121,6 +131,7 @@ public class dbAFD {
                 if(caracterE){ caracterE = false; }
 
                 if (!encontrado){
+                    ListaJsonSalida.add(cadena+","+nombreBusqueda+","+"Cadena Invalida");
                     salidaDeConsola = "\nCaracter invalido <"+caracter+">, no se puede hacer una transicion.";
                     System.out.println("Caracter invalido <"+caracter+">, no se puede hacer una transicion.");
                     break;
@@ -129,16 +140,69 @@ public class dbAFD {
 
             if(salidaDeConsola.equals("")){
                 if(!afd.getEstadosA().contains(estado)){
+                    ListaJsonSalida.add(cadena+","+nombreBusqueda+","+"Cadena Invalida");
                     salidaDeConsola = "\nCadena \""+ cadena+"\" invalida, no termina en el estado de aceptacion";
                     System.out.println("cadena invalida, no termina en el estado de aceptacion");
                     
-                }else{ salidaDeConsola = "\nLa expresion: \""+cadena+"\", es valida con la expresion regular "+nombreBusqueda+"."; }
+                }else{ salidaDeConsola = "\nLa expresion: \""+cadena+"\", es valida con la expresion regular "+nombreBusqueda+"."; ListaJsonSalida.add(cadena+","+nombreBusqueda+","+"Cadena Valida");}
             }
             
         
         }
         listaRespuestaConsola.add(salidaDeConsola);
         salidaDeConsola = "";
+    }
+    
+    public static void jsonSalida(String nombre){
+        int cont = 0;
+        String json = "";
+        
+        json += "[\n";
+        
+        for( String cadena: ListaJsonSalida ){
+            String[] cadenaSeparada = cadena. split(",");
+            String str = cadenaSeparada[0];
+            String ER = cadenaSeparada[1];
+            String resultado = cadenaSeparada[2];
+            String valor = "";
+            
+            if(str.indexOf("\"") != -1){
+                valor = str.replace("\\", "\\\\\\");
+            }else{
+                valor = str.replace("\\", "\\\\");
+            }
+            
+            if(ListaJsonSalida.size()-1== cont){
+                json += "\t{\n";
+                json += "\t\t\"Valor\": \""+valor+"\",\n";
+                json += "\t\t\"ExpresionRegular\": \""+ER+"\",\n";
+                json += "\t\t\"Resultado\": \""+resultado+"\"\n";
+                json += "\t}\n";
+                continue;
+            }
+            json += "\t{\n";
+            json += "\t\t\"Valor\": \""+valor+"\",\n";
+            json += "\t\t\"ExpresionRegular\": \""+ER+"\",\n";
+            json += "\t\t\"Resultado\": \""+resultado+"\"\n";
+            json += "\t},\n";
+            cont++;
+        }
+        
+        json += "]";
+        
+        int indice = nombre.indexOf("."); 
+        String Fcadena = nombre.substring(0,indice);
+        File archivo = new File("src/main/java/SALIDAS_202103718/"+Fcadena);
+        
+        try {
+            PrintWriter salida = new PrintWriter(archivo+".json");
+            salida.println(json);
+            salida.close();
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace(System.out);
+        }
+        
+        System.out.println("\n\n---------------ARCHIVO JSON---------------\n"+json);
     }
     
     public static List<String> muestraEnConsola(){

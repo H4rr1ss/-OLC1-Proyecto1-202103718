@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 %{
     public static LinkedList<usoER> TablaErr = new LinkedList<usoER>();
-    String cadena="";
+    public static String cadena="";
 %}
 
 %class Lexer
@@ -45,6 +45,7 @@ CONJASCII = {CONJASCIII}\~{CONJASCIII}|{CONJASCIII}(\,{CONJASCIII})+
         System.out.println("ESTA VACIA, NO HAY ERRORES");
     }else{
         TablaErr.clear();
+        cadena = "";
     }
     System.out.println("--------------------------->");
 

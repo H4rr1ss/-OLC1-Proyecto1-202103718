@@ -264,7 +264,7 @@ public class Lexer implements java_cup.runtime.Scanner {
 
   /* user code: */
     public static LinkedList<usoER> TablaErr = new LinkedList<usoER>();
-    String cadena="";
+    public static String cadena="";
 
 
   /**
@@ -513,6 +513,7 @@ public class Lexer implements java_cup.runtime.Scanner {
         System.out.println("ESTA VACIA, NO HAY ERRORES");
     }else{
         TablaErr.clear();
+        cadena = "";
     }
     System.out.println("--------------------------->");
 

@@ -1,4 +1,5 @@
 package AFD_202103718;
+import edu.usac.olc1.proyecto1.Nodo;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Arrays;
@@ -174,4 +175,121 @@ public class AFD {
         System.out.println("\n\n\n\n-----GRAPHVIZ-----\n");
         System.out.println(graphviz);
     }
+    
+    
+    
+    int cont = 0;
+    private String GraficaANDF(Nodo nodo){
+        
+        String etiqueta = "";
+        var arraylex = nodo.getValor().toCharArray();
+        
+        if(nodo.getHizq() == null && nodo.getHder() == null){
+            if(arraylex[0] == '\\'){
+                etiqueta += "[label = \"\\"+nodo.getValor()+"\"]";
+            }
+            else if(arraylex[0] == '\"'){
+                etiqueta += "[label = \"\\"+arraylex[0]+arraylex[1]+"\\"+arraylex[2]+"\"]";
+            }
+            else{
+                etiqueta += "[label = \""+nodo.getValor()+"\"]";
+            }
+        }else{
+            if(arraylex[0] == '.'){
+                if(nohijos((Nodo) nodo.getHizq())){
+                    etiqueta += "\nS"+cont+" -> S"+(++cont)+GraficaANDF((Nodo) nodo.getHizq());
+                }else{
+                    etiqueta += GraficaANDF((Nodo) nodo.getHizq());
+                }
+                
+                if(nohijos((Nodo) nodo.getHder())){
+                    etiqueta += "\nS"+cont+" -> S"+(++cont)+GraficaANDF((Nodo) nodo.getHder());
+                }else{
+                    etiqueta += GraficaANDF((Nodo) nodo.getHder());
+                }
+            }
+            else if(arraylex[0] == '|'){   
+                var contor = cont;             
+                etiqueta += "\nS" + contor + " -> S" + (++cont) + "[label=\"e\"]";
+                if(nohijos((Nodo) nodo.getHizq())){
+                    etiqueta += "\nS" + cont + " -> S" + (++cont) + GraficaANDF((Nodo)nodo.getHizq());
+                }
+                else{
+                    etiqueta += GraficaANDF((Nodo) nodo.getHizq());
+                }
+                var contfinal = cont;
+                etiqueta += "\nS" + contor + " -> S" + (++cont) + "[label=\"e\"]";
+                if(nohijos((Nodo) nodo.getHder())){
+                    etiqueta += "\nS" + cont + " -> S" + (++cont) + GraficaANDF((Nodo)nodo.getHder());
+                }
+                else{
+                    etiqueta += GraficaANDF((Nodo) nodo.getHder());
+                }
+                etiqueta += "\nS" + cont + " -> S" + (++cont) + "[label=\"e\"]";
+
+                etiqueta += "\nS" + contfinal + " -> S" + cont + "[label=\"e\"]";
+            }
+            else if(arraylex[0] == '*'){
+                var contcom = cont;
+                etiqueta += "\nS" + contcom + " -> S" + (++cont) + "[label=\"e\"]";
+                var contini = cont;
+                if(nohijos((Nodo) nodo.getHizq())){
+                    etiqueta += "\nS" + cont + " -> S" + (++cont) + GraficaANDF((Nodo)nodo.getHizq());
+                }
+                else{
+                    etiqueta += GraficaANDF((Nodo) nodo.getHizq());
+                }
+                etiqueta += "\nS" + cont + " -> S" + contini + "[label=\"e\"]";
+                etiqueta += "\nS" + cont + " -> S" + (++cont) + "[label=\"e\"]";
+                etiqueta += "\nS" + contcom + " -> S" + cont + "[label=\"e\"]";
+            }
+            else if(arraylex[0] == '+'){
+                etiqueta += "\nS" + cont + " -> S" + (++cont) + "[label=\"e\"]";
+                var contini = cont;
+                if(nohijos((Nodo)nodo.getHizq())){
+                    etiqueta += "\nS" + cont + " -> S" + (++cont) + GraficaANDF((Nodo)nodo.getHizq());
+                }
+                else{
+                    etiqueta += GraficaANDF((Nodo) nodo.getHizq());
+                }
+                etiqueta += "\nS" + cont + " -> S" + contini + "[label=\"e\"]";
+                etiqueta += "\nS" + cont + " -> S" + (++cont) + "[label=\"e\"]";
+            }
+            else if(arraylex[0] == '?'){
+                var contcou = cont;
+                etiqueta += "\nS" + contcou + " -> S" + (++cont) + "[label=\"e\"]";
+                if(nohijos((Nodo)nodo.getHizq())){
+                    etiqueta += "\nS" + cont + " -> S" + (++cont) + GraficaANDF((Nodo) nodo.getHizq());
+                }
+                else{
+                    etiqueta += GraficaANDF((Nodo) nodo.getHizq());
+                }
+                etiqueta += "\nS" + cont + " -> S" + (++cont) + "[label=\"e\"]";
+                etiqueta += "\nS" + contcou + " -> S"+ cont + "[label=\"e\"]";
+            }
+            
+        }
+        return etiqueta;
+    }
+    
+    
+    public void graficarAFND(Nodo nodo){
+        String grafica2 = "digraph G {\n rankdir=\"LR\" \n" + GraficaANDF((Nodo) nodo.getHizq()) + "\nS" + cont + "[shape = doublecircle]; \n}";
+        System.out.println("\n\n\n\n"+grafica2);
+    }
+    
+    
+    
+    private Boolean nohijos(Nodo nodo){
+        
+        if(nodo.getHder() == null && nodo.getHizq() == null){
+            return true;
+        }
+        return false;
+        
+    }
 }
+
+
+
+
