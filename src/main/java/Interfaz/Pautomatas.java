@@ -29,7 +29,19 @@ public class Pautomatas extends javax.swing.JPanel {
         
         Icon miIcono = new ImageIcon(imagen.getImage().getScaledInstance(ancho, 358, Image.SCALE_DEFAULT));
         lbl_imageN.setIcon(miIcono);
+        
+        
+        
+        ImageIcon imagenAFND = new ImageIcon("src/main/java/AFND_202103718/"+nombreImage+".jpg");
+        int anchoAFND = imagenAFND.getIconWidth();
+        
+        
+        Icon miIconoAFND = new ImageIcon(imagenAFND.getImage().getScaledInstance(anchoAFND, 303, Image.SCALE_DEFAULT));
+        lbl_afnd.setIcon(miIconoAFND);
+        
+        
         this.repaint();
+        
     }
 
     /**
@@ -44,11 +56,12 @@ public class Pautomatas extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         bg = new javax.swing.JPanel();
         lbl_imageN = new javax.swing.JLabel();
+        lbl_afnd = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         bg.setBackground(new java.awt.Color(255, 153, 153));
-        bg.setPreferredSize(new java.awt.Dimension(2500, 900));
+        bg.setPreferredSize(new java.awt.Dimension(4000, 900));
 
         lbl_imageN.setForeground(new java.awt.Color(0, 0, 0));
 
@@ -57,14 +70,18 @@ public class Pautomatas extends javax.swing.JPanel {
         bgLayout.setHorizontalGroup(
             bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bgLayout.createSequentialGroup()
-                .addComponent(lbl_imageN, javax.swing.GroupLayout.PREFERRED_SIZE, 2500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbl_imageN, javax.swing.GroupLayout.PREFERRED_SIZE, 3850, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbl_afnd, javax.swing.GroupLayout.PREFERRED_SIZE, 3999, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         bgLayout.setVerticalGroup(
             bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bgLayout.createSequentialGroup()
                 .addComponent(lbl_imageN, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 542, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbl_afnd, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 233, Short.MAX_VALUE))
         );
 
         jScrollPane1.setViewportView(bg);
@@ -77,6 +94,7 @@ public class Pautomatas extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel bg;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbl_afnd;
     private javax.swing.JLabel lbl_imageN;
     // End of variables declaration//GEN-END:variables
 }

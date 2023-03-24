@@ -10,7 +10,7 @@ Con la finalidad de la implementación de el Método del Árbol y el Método de 
 | ------ | ------ |
 | \ n | Salto de llínea |
 | \\' | Comilla Simple |
-| \\" | Comilla Doble |
+| \\" | Comilla Doble |  
 
 * **Comentarios:** El lenguaje OLC perimitrá el uso de comentario de una o varias líneas.
 
@@ -56,20 +56,20 @@ expresion_regular: "Este lexema se evaluara";
 >
 >// Definición de conjuntos
 >
->CONJ: letra -> a ~ z;
+>CONJ: letra -> a ~ z;  
 >CONJ: digito -> 0 ~ 9;
 >
 >
 >//Expresiones regulares
 >
->ExpReg1 -> . {letra} * | "_" | {letra} {digito};
+>ExpReg1 -> . {letra} * | "_" | {letra} {digito};  
 >ExpresionReg2 -> . {digito} . "." + {digito};
 >
->%%
+>%%  
 >%%
 >
->//Prueba de expresiones regulares
->ExpReg1: "primerLexemaCokoa";
+>//Prueba de expresiones regulares  
+>ExpReg1: "primerLexemaCokoa";  
 >ExpresionReg2: "34.44";
 >
 >}
@@ -77,6 +77,7 @@ expresion_regular: "Este lexema se evaluara";
 ## Aplicación 🔲
 El programa cuenta con una vista gráfica la cual facilita la interacción entre el sistema y el usuario final para un mejor desempeño del mismo. Por medio de dicha interfaz, al usuario se le permite seleccionar de forma gráfica un archivo de entrada que contendrá el código a analizar. El usuario puede navegar por la aplicación seleccionando a través de botones la acción que desea realizar, si ocurre un error en el ingreso de datos el programa mostrará un listado de los errores cometidos durante la lectura.
 * **Ventana inicial:** La ventana inicial cuenta con las opciones, guardar, guardar como, abrir archivo, crear archivo, salir, analizar y ver afd.
+
 
 
 ~~~

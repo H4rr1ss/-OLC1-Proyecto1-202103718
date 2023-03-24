@@ -108,7 +108,7 @@ public class AFD {
             ex.printStackTrace();
         } finally {
         }
-    }    
+    }
     
     public void graphvizAFD(){
         String graphviz = "";//AGREGAR  COMA POR APARTE
@@ -176,7 +176,14 @@ public class AFD {
         System.out.println(graphviz);
     }
     
-    
+    private Boolean nohijos(Nodo nodo){
+        
+        if(nodo.getHder() == null && nodo.getHizq() == null){
+            return true;
+        }
+        return false;
+        
+    }
     
     int cont = 0;
     private String GraficaANDF(Nodo nodo){
@@ -273,21 +280,66 @@ public class AFD {
     }
     
     
-    public void graficarAFND(Nodo nodo){
+    private String graficarAFND(Nodo nodo){
         String grafica2 = "digraph G {\n rankdir=\"LR\" \n" + GraficaANDF((Nodo) nodo.getHizq()) + "\nS" + cont + "[shape = doublecircle]; \n}";
-        System.out.println("\n\n\n\n"+grafica2);
+        return grafica2;
     }
     
-    
-    
-    private Boolean nohijos(Nodo nodo){
+    public void graficar_AFND(String nombre, Nodo nodo){
+        String entrada = graficarAFND(nodo);
         
-        if(nodo.getHder() == null && nodo.getHizq() == null){
-            return true;
+        graphviz_AFND(nombre, entrada);
+    }
+    
+    private void graphviz_AFND(String nombre, String graphviz){
+        FileWriter fichero = null;
+        PrintWriter pw = null;
+        try {
+            fichero = new FileWriter("src/main/java/AFND_202103718/" + nombre + ".dot");
+            pw = new PrintWriter(fichero);
+            pw.println(graphviz);
+
+        } catch (Exception e) {
+            System.out.println("error, no se realizo el archivo"+e);
+        } finally {
+            try {
+                if (null != fichero) {
+                    fichero.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
         }
-        return false;
-        
-    }
+        //para compilar el archivo dot y obtener la imagen
+        try {
+            //dirección doonde se ecnuentra el compilador de graphviz
+            String dotPath = "C:\\Program Files\\Graphviz\\bin\\dot.exe";
+            //dirección del archivo dot
+            String fileInputPath = "src/main/java/AFND_202103718/" + nombre + ".dot";
+            //dirección donde se creara la magen
+            String fileOutputPath = "src/main/java/AFND_202103718/" + nombre + ".jpg";
+            //tipo de conversón
+            String tParam = "-Tjpg";
+            String tOParam = "-o";
+
+            String[] cmd = new String[5];
+            cmd[0] = dotPath;
+            cmd[1] = tParam;
+            cmd[2] = fileInputPath;
+            cmd[3] = tOParam;
+            cmd[4] = fileOutputPath;
+
+            Runtime rt = Runtime.getRuntime();
+
+            rt.exec(cmd);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+        }
+    }    
+    
+    
 }
 
 

@@ -1,12 +1,12 @@
 [
 	{
-		"Valor": "\\\"cadena entre comilla simple\\\"",
-		"ExpresionRegular": "cadena",
+		"Valor": "https://facebook.com",
+		"ExpresionRegular": "url",
 		"Resultado": "Cadena Valida"
 	},
 	{
-		"Valor": "COMPI1 sale con 100",
-		"ExpresionRegular": "frase",
+		"Valor": "lachalana666@ingusac.com",
+		"ExpresionRegular": "correoElectronico",
 		"Resultado": "Cadena Valida"
 	}
 ]

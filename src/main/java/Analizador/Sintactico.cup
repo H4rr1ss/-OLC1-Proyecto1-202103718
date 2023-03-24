@@ -172,7 +172,6 @@ DEFER ::= DEFER VARIABLE:nombre GUION MAYOR ER:valor PC
             //TABLA DE SIGUIENTES------------------------------>
             parser.objSig.addElementH(nuevaraiz.getHizq().getUltimo(), nuevaraiz.getHder().getPrimero());
             cadenaERnombre += "#,";
-            System.out.println("ARRIBA: "+cadenaERnombre);
             parser.objSig.Graphviz(cadenaERnombre, nombre);
             //------------------------------------------------->
 
@@ -190,6 +189,7 @@ DEFER ::= DEFER VARIABLE:nombre GUION MAYOR ER:valor PC
             objAFD.graphvizAFD();
             objAFD.setConjuntos(conjunts);
             dbAFD.InsertAFD(objAFD);
+            objAFD.graficar_AFND(nombre, nuevaraiz);
             //-------------------------------------------------->
 
             //-----------------REINICIO DE VARIABLES-----------------
@@ -225,7 +225,6 @@ DEFER ::= DEFER VARIABLE:nombre GUION MAYOR ER:valor PC
             //TABLA DE SIGUIENTES------------------------------>
             parser.objSig.addElementH(nuevaraiz.getHizq().getUltimo(), nuevaraiz.getHder().getPrimero());
             cadenaERnombre += "#,";
-            System.out.println("ABAJO: "+cadenaERnombre);
             parser.objSig.Graphviz(cadenaERnombre, nombre);
             //------------------------------------------------->
 
@@ -243,7 +242,7 @@ DEFER ::= DEFER VARIABLE:nombre GUION MAYOR ER:valor PC
             objAFD.graphvizAFD();
             objAFD.setConjuntos(conjunts);
             dbAFD.InsertAFD(objAFD);
-            objAFD.graficarAFND(nuevaraiz);
+            objAFD.graficar_AFND(nombre, nuevaraiz);
             //-------------------------------------------------->
             
             //-----------------REINICIO DE VARIABLES-----------------
@@ -303,7 +302,6 @@ ER ::= SD:c ER:a ER:b
             RESULT = dualER;
         }
 
-        //System.out.println("ER--|"+a+c.toString()+b);
         
     :}
     | T:t
@@ -345,7 +343,6 @@ T ::= SU:a ER:b
                 parser.cont++;
                 RESULT = indER;
             }
-            //System.out.println("T ER|"+a+b.getValor());
             
         :}
     | TE:s
@@ -379,7 +376,6 @@ SD ::= CONCAT:c
 TE ::= SIMB:i
     {:
         // METODO DEL ARBOL
-        System.out.println("SIMBOLOS ESPECIALES---> "+i.toString());
         cadenaERnombre += i.toString() + ",";
         RESULT = i.toString(); 
         
@@ -410,17 +406,11 @@ TESTER ::= TESTER VARIABLE:a DP STR:s PC
                 String cadena = s.toString();
                 String Fcadena = cadena.substring(1,cadena.length()-1);
                 dbAFD.validarCadena(Fcadena, a.toString());
-                System.out.println("ESTO SE EVALUARA--------------------->\nAutomata: "+a.toString()+"\ncadena: "+Fcadena);
             :}
          | VARIABLE:v DP STR:t PC
             {:
                 String cadenas = t.toString();
                 String Fcadenas = cadenas.substring(1,cadenas.length()-1);
                 dbAFD.validarCadena(Fcadenas, v.toString());
-                System.out.println("ESTO SE EVALUARA--------------------->\nAutomata: "+v.toString()+"\ncadena: "+Fcadenas);
             :}
          ;
-
-
-
-

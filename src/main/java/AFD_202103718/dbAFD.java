@@ -133,7 +133,6 @@ public class dbAFD {
                 if (!encontrado){
                     ListaJsonSalida.add(cadena+","+nombreBusqueda+","+"Cadena Invalida");
                     salidaDeConsola = "\nCaracter invalido <"+caracter+">, no se puede hacer una transicion.";
-                    System.out.println("Caracter invalido <"+caracter+">, no se puede hacer una transicion.");
                     break;
                 }
             }
@@ -142,7 +141,6 @@ public class dbAFD {
                 if(!afd.getEstadosA().contains(estado)){
                     ListaJsonSalida.add(cadena+","+nombreBusqueda+","+"Cadena Invalida");
                     salidaDeConsola = "\nCadena \""+ cadena+"\" invalida, no termina en el estado de aceptacion";
-                    System.out.println("cadena invalida, no termina en el estado de aceptacion");
                     
                 }else{ salidaDeConsola = "\nLa expresion: \""+cadena+"\", es valida con la expresion regular "+nombreBusqueda+"."; ListaJsonSalida.add(cadena+","+nombreBusqueda+","+"Cadena Valida");}
             }
@@ -202,7 +200,6 @@ public class dbAFD {
             ex.printStackTrace(System.out);
         }
         
-        System.out.println("\n\n---------------ARCHIVO JSON---------------\n"+json);
     }
     
     public static List<String> muestraEnConsola(){
